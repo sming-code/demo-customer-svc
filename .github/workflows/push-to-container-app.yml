@@ -10,21 +10,21 @@ on:
         type: string
         required: true
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deployment:
     name: Push image to container app
     runs-on: ubuntu-latest
 
     steps:
-    - uses: azure/login@v3
+    - uses: azure/login@ce6a9ff965c6b99ee966eee159baa8c35e135635
       with:
         client-id: ${{ secrets.CLIENT_ID }}
         tenant-id: ${{ secrets.TENANT_ID }}
         subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-      secrets:
-        clientId: ${{ secrets.AZURE_CLIENT_ID }}
-        tenantId: ${{ secrets.AZURE_TENANT_ID }}
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     - uses: azure/container-apps-deploy-action@v1
       with:
         containerAppName: test-container-app-name
