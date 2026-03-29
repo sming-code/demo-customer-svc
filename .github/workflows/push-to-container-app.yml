@@ -10,11 +10,6 @@ on:
         type: string
         required: true
 
-env:
-  CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
 jobs:
   deployment:
     name: Push image to container app
@@ -26,7 +21,10 @@ jobs:
         client-id: ${{ env.CLIENT_ID }}
         tenant-id: ${{ env.TENANT_ID }}
         subscription-id: ${{ env.SUBSCRIPTION_ID }}
-
+      env:
+        CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     - uses: azure/container-apps-deploy-action@v1
       with:
         containerAppName: test-container-app-name
