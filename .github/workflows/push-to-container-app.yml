@@ -16,6 +16,7 @@ permissions:
 
 jobs:
   deployment:
+    environment: development
     name: Push image to container app
     runs-on: ubuntu-latest
 
