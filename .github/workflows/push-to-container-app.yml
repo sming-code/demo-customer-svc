@@ -35,8 +35,8 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     - uses: azure/container-apps-deploy-action@v1
       with:
-        containerAppName: test-container-app-name
-        resourceGroup: test-container-app-resource-group
+        containerAppName: ca-customer-svc-worker-dev
+        resourceGroup: sming
         imageToDeploy: ghcr.io/sming-code/${{ inputs.image-name }}:${{ inputs.version-number }}
         registryUrl: ghcr.io
         registryUsername: ${{ secrets.GHCR_USERNAME }}
