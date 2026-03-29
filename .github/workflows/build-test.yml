@@ -62,15 +62,15 @@ jobs:
           Nuget_CustomFeedPassword=${{ secrets.GITHUB_TOKEN }}
         tags: |
           ${{ inputs.image-name }}:${{ inputs.version-number }}
-        outputs: type=docker,dest=${{ runner.temp }}/docker-image${{ inputs.dockerfile-name }}.tar
+        outputs: type=docker,dest=${{ runner.temp }}/docker-image.tar
     - name: generate random archive file name
       id: getArchiveName
       run: |
-        archiveName="$(uuidgen).tar"
+        archiveName="$(uuidgen)"
         echo "ARCHIVE_NAME=$archiveName" >> $GITHUB_OUTPUT
     - name: Upload artifact
       uses: actions/upload-artifact@v7
       with:
-        name: docker-image
-        path: ${{ runner.temp }}/${{ steps.getArchiveName.outputs.ARCHIVE_NAME }}
+        name: ${{ steps.getArchiveName.outputs.ARCHIVE_NAME }}
+        path: ${{ runner.temp }}/docker-image.tar
         retention-days: 5

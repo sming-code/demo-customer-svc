@@ -19,6 +19,7 @@ jobs:
       run: echo "Variables loaded..."
     outputs:
       image-name: demo-customer-svc-worker
+      dockerfile-name: Dockerfile.worker
   get-version-no:
     uses: ./.github/workflows/get-version-no.yml
   build-test-create-docker-image:
@@ -28,7 +29,7 @@ jobs:
     with:
       project-name: DemoApp.Services.Customers.Worker
       image-name: ${{ needs.variables.outputs.image-name }}
-      dockerfile-name: Dockerfile.worker
+      dockerfile-name: ${{ needs.variables.outputs.dockerfile-name }}
       version-number: ${{ needs.get-version-no.outputs.next-version }}
   publish-docker-image:
     name: Publish docker image
@@ -37,8 +38,8 @@ jobs:
     uses: ./.github/workflows/publish-docker-image.yml
     with:
       image-name: ${{ needs.variables.outputs.image-name }}
-      dockerfile-name: Dockerfile.worker
       version-number: ${{ needs.get-version-no.outputs.next-version }}
+      archive-name: ${{ needs.build-test-create-docker-image.outputs.archive-file-name }}
   push-to-container-app:
     name: Push image to container app
     needs: [ variables, get-version-no, publish-docker-image ]

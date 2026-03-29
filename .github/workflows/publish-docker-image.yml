@@ -3,8 +3,8 @@ name: Publish Docker Image
 on:
   workflow_call:
     inputs:
-      dockerfile-name:
-        description: The name of the dockerfile used
+      archive-name:
+        description: The name of the artifact to download
         required: true
         type: string
       image-name:
@@ -30,11 +30,11 @@ jobs:
     - name: Download Build Artifacts
       uses: actions/download-artifact@v8
       with:
-        name: docker-image
+        name: ${{ inputs.archive-name }}
         path: ${{ runner.temp }}
     - name: Load image
       run: |
-        docker load --input ${{ runner.temp }}/docker-image${{ inputs.dockerfile-name }}.tar
+        docker load --input ${{ runner.temp }}/docker-image.tar
         docker image ls -a
     - name: Publish to GPR
       run: |
