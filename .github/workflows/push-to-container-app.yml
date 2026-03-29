@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: azure/login@ce6a9ff965c6b99ee966eee159baa8c35e135635
+    - uses: azure/login@8c334a195cbb38e46038007b304988d888bf676a
       with:
         client-id: ${{ secrets.CLIENT_ID }}
         tenant-id: ${{ secrets.TENANT_ID }}
