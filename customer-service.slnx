@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="DemoApp.Services.Customers.Api/DemoApp.Services.Customers.Api.csproj" />
+  <Project Path="DemoApp.Services.Customers.BusinessLogic.Tests/DemoApp.Services.Customers.BusinessLogic.Tests.csproj" />
+  <Project Path="DemoApp.Services.Customers.BusinessLogic/DemoApp.Services.Customers.BusinessLogic.csproj" />
+  <Project Path="DemoApp.Services.Customers.Dependencies/DemoApp.Services.Customers.Dependencies.csproj" />
+  <Project Path="DemoApp.Services.Customers.Domain/DemoApp.Services.Customers.Domain.csproj" />
+  <Project Path="DemoApp.Services.Customers.Worker/DemoApp.Services.Customers.Worker.csproj" />
+</Solution>

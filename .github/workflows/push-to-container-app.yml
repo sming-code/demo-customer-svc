@@ -1,0 +1,36 @@
+name: Push to container app
+
+on:
+  workflow_call:
+    inputs:
+      image-name:
+        type: string
+        required: true
+      version-number:
+        type: string
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deployment:
+    name: Push image to container app
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: azure/login@v3
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - uses: azure/container-apps-deploy-action@v1
+      with:
+        containerAppName: test-container-app-name
+        resourceGroup: test-container-app-resource-group
+        imageToDeploy: ghcr.io/sming-code/${{ inputs.image-name }}:${{ inputs.version-number }}
+        registryUrl: ghcr.io
+        registryUsername: ${{ secrets.GHCR_USERNAME }}
+        registryPassword: ${{ secrets.GHCR_TOKEN }}

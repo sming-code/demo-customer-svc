@@ -1,0 +1,76 @@
+name: Build Test
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: The name of the project for this build
+        required: true
+        type: string
+      dockerfile-name:
+        description: The name of the dockerfile to use
+        required: true
+        type: string
+      image-name:
+        description: The name of the docker image to generate
+        required: true
+        type: string
+      version-number:
+        description: The version to give to nuget packages
+        required: true
+        type: string
+    outputs:
+      archive-file-name:
+        description: The name of the archive file created as an artifact by this task.
+        value: ${{ jobs.build.outputs.archiveName }}
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    outputs:
+      archiveName: ${{ steps.getArchiveName.outputs.ARCHIVE_NAME }}
+    name: Build, test and create docker image
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: Setup .Net
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 10.0.x
+        source-url: https://nuget.pkg.github.com/sming-code/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+    - name: Repoint dockerfile to point to correct project (needed particularly for entrypoint)
+      run: sed -i -E 's/\$Project_Name/${{ inputs.project-name }}/g' "${{ inputs.dockerfile-name }}"
+    - name: Build docker image
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        file: ${{ inputs.dockerfile-name }}
+        build-args: |
+          Nuget_CustomFeedUserName=USERNAME
+          Nuget_CustomFeedPassword=${{ secrets.GITHUB_TOKEN }}
+        tags: |
+          ${{ inputs.image-name }}:${{ inputs.version-number }}
+        outputs: type=docker,dest=${{ runner.temp }}/docker-image${{ inputs.dockerfile-name }}.tar
+    - name: generate random archive file name
+      id: getArchiveName
+      run: |
+        archiveName="$(uuidgen).tar"
+        echo "ARCHIVE_NAME=$archiveName" >> $GITHUB_OUTPUT
+    - name: Upload artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: docker-image
+        path: ${{ runner.temp }}/${{ steps.getArchiveName.outputs.ARCHIVE_NAME }}
+        retention-days: 5

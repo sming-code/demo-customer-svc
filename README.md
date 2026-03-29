@@ -1,1 +1,1 @@
-# demo-customer-svc
+# demo-application
