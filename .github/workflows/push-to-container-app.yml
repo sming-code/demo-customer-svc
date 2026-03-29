@@ -18,13 +18,13 @@ jobs:
     steps:
     - uses: azure/login@v3
       with:
-        client-id: ${{ env.CLIENT_ID }}
-        tenant-id: ${{ env.TENANT_ID }}
-        subscription-id: ${{ env.SUBSCRIPTION_ID }}
-      env:
-        CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ secrets.CLIENT_ID }}
+        tenant-id: ${{ secrets.TENANT_ID }}
+        subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+      secrets:
+        clientId: ${{ secrets.AZURE_CLIENT_ID }}
+        tenantId: ${{ secrets.AZURE_TENANT_ID }}
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     - uses: azure/container-apps-deploy-action@v1
       with:
         containerAppName: test-container-app-name
