@@ -9,7 +9,7 @@ on:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+  
 jobs:
   variables:
     name: Generate variables
@@ -51,7 +51,10 @@ jobs:
     uses: ./.github/workflows/create-resource-group.yml
     with:
       container-app-name: ${{ needs.variables.outputs.image-name }}
-    secrets: inherit
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
   push-to-container-app:
     name: Push image to container app
@@ -62,7 +65,10 @@ jobs:
       image-name: ${{ needs.variables.outputs.image-name }}
       version-number: ${{ needs.get-version-no.outputs.next-version }}
       resource-group: ${{ needs.create-resource-group.outputs.resource-group-id }}
-    secrets: inherit
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
   create-release:
     name: Create release
