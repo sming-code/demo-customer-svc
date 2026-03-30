@@ -25,6 +25,7 @@ permissions:
 
 jobs:
   deploy-resource-group:
+    environment: development
     name: Deploy new resource group to azure
     outputs:
       resourceGroupId: ${{ steps.rg-deployment.outputs.resourceGroupId }}
