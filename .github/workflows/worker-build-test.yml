@@ -24,29 +24,30 @@ jobs:
   get-version-no:
     uses: ./.github/workflows/get-version-no.yml
 
-  build-test-create-docker-image:
-    name: Build and Test
-    needs: [ variables, get-version-no ]
-    uses: ./.github/workflows/build-test.yml
-    with:
-      project-name: DemoApp.Services.Customers.Worker
-      image-name: ${{ needs.variables.outputs.image-name }}
-      dockerfile-name: ${{ needs.variables.outputs.dockerfile-name }}
-      version-number: ${{ needs.get-version-no.outputs.next-version }}
+  # build-test-create-docker-image:
+  #   name: Build and Test
+  #   needs: [ variables, get-version-no ]
+  #   uses: ./.github/workflows/build-test.yml
+  #   with:
+  #     project-name: DemoApp.Services.Customers.Worker
+  #     image-name: ${{ needs.variables.outputs.image-name }}
+  #     dockerfile-name: ${{ needs.variables.outputs.dockerfile-name }}
+  #     version-number: ${{ needs.get-version-no.outputs.next-version }}
 
-  publish-docker-image:
-    name: Publish docker image
-    needs: [ variables, get-version-no, build-test-create-docker-image ]
-    if: ${{ github.ref == 'refs/heads/main' }}
-    uses: ./.github/workflows/publish-docker-image.yml
-    with:
-      image-name: ${{ needs.variables.outputs.image-name }}
-      version-number: ${{ needs.get-version-no.outputs.next-version }}
-      archive-name: ${{ needs.build-test-create-docker-image.outputs.archive-file-name }}
+  # publish-docker-image:
+  #   name: Publish docker image
+  #   needs: [ variables, get-version-no, build-test-create-docker-image ]
+  #   if: ${{ github.ref == 'refs/heads/main' }}
+  #   uses: ./.github/workflows/publish-docker-image.yml
+  #   with:
+  #     image-name: ${{ needs.variables.outputs.image-name }}
+  #     version-number: ${{ needs.get-version-no.outputs.next-version }}
+  #     archive-name: ${{ needs.build-test-create-docker-image.outputs.archive-file-name }}
 
   create-resource-group:
     name: Create resource group for container app
-    needs: [ variables, publish-docker-image ]
+    needs: [ variables ]
+    # needs: [ variables, publish-docker-image ]
     if: ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/create-resource-group.yml
     with:
@@ -62,8 +63,8 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/push-to-container-app.yml
     with:
-      image-name: ${{ needs.variables.outputs.image-name }}
-      version-number: ${{ needs.get-version-no.outputs.next-version }}
+      image-name: demo-customer-svc-worker
+      version-number: 1.0.2
       resource-group: ${{ needs.create-resource-group.outputs.resource-group-id }}
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
