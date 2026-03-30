@@ -8,9 +8,9 @@ on:
         required: true
         type: string
     outputs:
-      resource-group-id:
-        description: The id of the resource group created
-        value: ${{ jobs.deploy-resource-group.outputs.resourceGroupId }}
+      resource-group-name:
+        description: The name of the resource group to create
+        value: ${{ jobs.variables.outputs.resourceGroupName }}
     secrets:
       AZURE_CLIENT_ID:
         required: true
@@ -24,11 +24,18 @@ permissions:
   contents: read
 
 jobs:
+  variables:
+    name: Generate variables
+    runs-on: ubuntu-latest
+    steps:
+    - name: Display done
+      run: echo "Variables loaded..."
+    outputs:
+      resourceGroupName: rg-${{ inputs.container-app-name }}
   deploy-resource-group:
     environment: development
     name: Deploy new resource group to azure
-    outputs:
-      resourceGroupId: ${{ steps.rg-deployment.outputs.resourceGroupId }}
+    needs: variables
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -47,4 +54,4 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: sming
         template: ./.github/workflows/bicep/create-resource-group.bicep
-        parameters: 'resourceGroupName=rg-${{ inputs.container-app-name }} resourceGroupLocation=uksouth'
+        parameters: 'resourceGroupName=${{ needs.variables.outputs.resourceGroupName }} resourceGroupLocation=uksouth'
