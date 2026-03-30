@@ -42,6 +42,7 @@ jobs:
       id: rg-deployment
       uses: azure/arm-deploy@v2
       with:
+        scope: subscription
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: sming
         template: ./.github/workflows/bicep/create-resource-group.bicep
