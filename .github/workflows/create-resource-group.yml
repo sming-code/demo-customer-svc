@@ -31,6 +31,7 @@ jobs:
       resourceGroupId: ${{ steps.rg-deployment.outputs.resourceGroupId }}
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v6
     - uses: azure/login@v2
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -43,5 +44,5 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: sming
-        template: ../.github/workflows/bicep/create-resource-group.bicep
+        template: ./.github/workflows/bicep/create-resource-group.bicep
         parameters: 'resourceGroupName=rg-${{ inputs.container-app-name }} resourceGroupLocation=UK_South'
