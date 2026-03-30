@@ -43,5 +43,5 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: sming
-        template: ./bicep/create-resource-group.bicep
+        template: ./.github/workflows/bicep/create-resource-group.bicep
         parameters: 'resourceGroupName=rg-${{ inputs.container-app-name }} resourceGroupLocation=UK_South'
