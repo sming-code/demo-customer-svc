@@ -44,18 +44,25 @@ jobs:
       version-number: ${{ needs.get-version-no.outputs.next-version }}
       archive-name: ${{ needs.build-test-create-docker-image.outputs.archive-file-name }}
 
+  create-resource-group:
+    name: Create resource group for container app
+    needs: [ variables, publish-docker-image ]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/create-resource-group.yml
+    with:
+      container-app-name: ${{ needs.variables.outputs.image-name }}
+    secrets: inherit
+
   push-to-container-app:
     name: Push image to container app
-    needs: [ variables, get-version-no, publish-docker-image ]
+    needs: [ variables, get-version-no, create-resource-group ]
     if: ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/push-to-container-app.yml
     with:
       image-name: ${{ needs.variables.outputs.image-name }}
       version-number: ${{ needs.get-version-no.outputs.next-version }}
-    secrets:
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      resource-group: ${{ needs.create-resource-group.outputs.resource-group-id }}
+    secrets: inherit
 
   create-release:
     name: Create release
