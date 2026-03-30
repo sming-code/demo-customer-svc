@@ -1,0 +1,40 @@
+name: Create resource group
+
+on:
+  workflow_call:
+    inputs:
+      container-app-name:
+        description: The name of the container app being released
+        required: true
+        type: string
+    outputs:
+      resource-group-id:
+        description: The id of the resource group created
+        value: ${{ jobs.deploy-resource-group.outputs.resourceGroupId }}
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-resource-group:
+    name: Deploy new resource group to azure
+    outputs:
+      resourceGroupId: ${{ steps.rg-deployment.outputs.resourceGroupId }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploy
+      id: rg-deployment
+      uses: azure/arm-deploy@v2
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: sming
+        template: ./bicep/create-resource-group.bicep
+        parameters: 'resourceGroupName=rg-${{ inputs.container-app-name }} resourceGroupLocation=UK_South'

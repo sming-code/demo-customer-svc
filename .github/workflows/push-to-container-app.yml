@@ -9,6 +9,9 @@ on:
       version-number:
         type: string
         required: true
+      resource-group:
+        type: string
+        required: true
     secrets:
       AZURE_CLIENT_ID:
         required: true
@@ -36,7 +39,7 @@ jobs:
     - uses: azure/container-apps-deploy-action@v1
       with:
         containerAppName: ca-customer-svc-worker-dev
-        resourceGroup: sming
+        resourceGroup: ${{ inputs.resource-group }}
         imageToDeploy: ghcr.io/sming-code/${{ inputs.image-name }}:${{ inputs.version-number }}
         registryUrl: ghcr.io
         registryUsername: ${{ secrets.GHCR_USERNAME }}
