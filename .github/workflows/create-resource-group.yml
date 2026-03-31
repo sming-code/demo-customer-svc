@@ -31,7 +31,7 @@ jobs:
     - name: Display done
       run: echo "Variables loaded..."
     outputs:
-      resourceGroupName: rg-${{ inputs.container-app-name }}
+      resourceGroupName: rg-test-${{ inputs.container-app-name }}
       
   deploy-resource-group:
     environment: development
