@@ -22,31 +22,11 @@ jobs:
       dockerfile-name: Dockerfile.worker
       
   get-version-no:
-    uses: ./.github/workflows/get-version-no.yml
-
-  build-test-create-docker-image:
-    name: Build and Test
-    needs: [ variables, get-version-no ]
-    uses: ./.github/workflows/build-test.yml
-    with:
-      project-name: DemoApp.Services.Customers.Worker
-      image-name: ${{ needs.variables.outputs.image-name }}
-      dockerfile-name: ${{ needs.variables.outputs.dockerfile-name }}
-      version-number: ${{ needs.get-version-no.outputs.next-version }}
-
-  publish-docker-image:
-    name: Publish docker image
-    needs: [ variables, get-version-no, build-test-create-docker-image ]
-    if: ${{ github.ref == 'refs/heads/main' }}
-    uses: ./.github/workflows/publish-docker-image.yml
-    with:
-      image-name: ${{ needs.variables.outputs.image-name }}
-      version-number: ${{ needs.get-version-no.outputs.next-version }}
-      archive-name: ${{ needs.build-test-create-docker-image.outputs.archive-file-name }}
+    uses: ./.github/workflows/get-version-no.yaml
 
   create-resource-group:
     name: Create resource group for container app
-    needs: [ variables, publish-docker-image ]
+    needs: [ variables ]
     if: ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/create-resource-group.yml
     with:
@@ -56,25 +36,11 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-  push-to-container-app:
-    name: Push image to container app
-    needs: [ variables, get-version-no, create-resource-group ]
-    if: ${{ github.ref == 'refs/heads/main' }}
-    uses: ./.github/workflows/push-to-container-app.yml
-    with:
-      image-name: demo-customer-svc-worker
-      version-number: 1.0.2
-      resource-group: ${{ needs.create-resource-group.outputs.resource-group-id }}
-    secrets:
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-  create-release:
-    name: Create release
-    needs: [ get-version-no, push-to-container-app ]
-    if: ${{ github.ref == 'refs/heads/main' }}
-    uses: ./.github/workflows/add-github-release.yml
-    with:
-      version-number: ${{ needs.get-version-no.outputs.next-version }}
-      previous-tag: ${{ needs.get-version-no.outputs.last-version-tag }}
+  display-output:
+    name: Display output resource group name from prev step
+    runs-on: ubuntu-latest
+    needs: [ create-resource-group ]
+    steps:
+    - name: Display resource group name
+      run: |
+        echo "${{ needs.create-resource-group.outputs.resource-group-name }}"

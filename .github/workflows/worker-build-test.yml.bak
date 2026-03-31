@@ -22,7 +22,7 @@ jobs:
       dockerfile-name: Dockerfile.worker
       
   get-version-no:
-    uses: ./.github/workflows/get-version-no.yml
+    uses: ./.github/workflows/get-version-no.yaml
 
   build-test-create-docker-image:
     name: Build and Test
@@ -62,8 +62,8 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/push-to-container-app.yml
     with:
-      image-name: ${{ needs.variables.outputs.image-name }}
-      version-number: ${{ needs.get-version-no.outputs.next-version }}
+      image-name: demo-customer-svc-worker
+      version-number: 1.0.2
       resource-group: ${{ needs.create-resource-group.outputs.resource-group-id }}
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
