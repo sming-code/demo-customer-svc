@@ -43,18 +43,18 @@ runs:
 
   - name: Repoint dockerfile to point to correct project (needed particularly for entrypoint)
     shell: bash
-    run: sed -i -E 's/\$Project_Name/${{ inputs.project-name }}.${{ inputs.service-type }}/g' "${{ inputs.dockerfile-name }}.${{ steps.lower-case-service-type.outputs.service-type-lower }}"
+    run: sed -i -E 's/\$Project_Name/${{ inputs.project-name-root }}.${{ inputs.service-type }}/g' "${{ inputs.dockerfile-name-root }}.${{ steps.lower-case-service-type.outputs.service-type-lower }}"
 
   - name: Build docker image
     uses: docker/build-push-action@v7
     with:
       context: .
-      file: ${{ inputs.dockerfile-name }}.${{ steps.lower-case-service-type.outputs.service-type-lower }}
+      file: ${{ inputs.dockerfile-name-root }}.${{ steps.lower-case-service-type.outputs.service-type-lower }}
       build-args: |
         Nuget_CustomFeedUserName=USERNAME
         Nuget_CustomFeedPassword=${{ github.token }}
       tags: |
-        ${{ inputs.image-name }}-${{ steps.lower-case-service-type.outputs.service-type-lower }}:${{ inputs.version-number }}
+        ${{ inputs.image-name-root }}-${{ steps.lower-case-service-type.outputs.service-type-lower }}:${{ inputs.version-number }}
       outputs: type=docker,dest=${{ runner.temp }}/docker-image.tar
 
   - name: Load image
@@ -66,10 +66,10 @@ runs:
   - name: Publish to GPR
     shell: bash
     run: |
-      docker tag ${{ inputs.image-name }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name }}:latest
-      docker tag ${{ inputs.image-name }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name }}:${{ inputs.version-number }}
-      docker push ghcr.io/sming-code/${{ inputs.image-name }}:latest
-      docker push ghcr.io/sming-code/${{ inputs.image-name }}:${{ inputs.version-number }}
+      docker tag ${{ inputs.image-name-root }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-root }}:latest
+      docker tag ${{ inputs.image-name-root }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-root }}:${{ inputs.version-number }}
+      docker push ghcr.io/sming-code/${{ inputs.image-name-root }}:latest
+      docker push ghcr.io/sming-code/${{ inputs.image-name-root }}:${{ inputs.version-number }}
 
   # - name: Upload artifact
   #   uses: actions/upload-artifact@v7
@@ -99,7 +99,7 @@ runs:
   #       docker image ls -a
   #   - name: Publish to GPR
   #     run: |
-  #       docker tag ${{ inputs.image-name }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name }}:latest
-  #       docker tag ${{ inputs.image-name }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name }}:${{ inputs.version-number }}
-  #       docker push ghcr.io/sming-code/${{ inputs.image-name }}:latest
-  #       docker push ghcr.io/sming-code/${{ inputs.image-name }}:${{ inputs.version-number }}
+  #       docker tag ${{ inputs.image-name-root }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-root }}:latest
+  #       docker tag ${{ inputs.image-name-root }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-root }}:${{ inputs.version-number }}
+  #       docker push ghcr.io/sming-code/${{ inputs.image-name-root }}:latest
+  #       docker push ghcr.io/sming-code/${{ inputs.image-name-root }}:${{ inputs.version-number }}
