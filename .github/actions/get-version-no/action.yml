@@ -33,5 +33,5 @@ runs:
         echo "last-release-tag=$latestReleaseTag" >> $GITHUB_OUTPUT
         echo "version-no=${newReleaseVersionTag:1}" >> $GITHUB_OUTPUT
       env:
-        Major_Version: ${{ inputs.major-version }}
-        Minor_Version: ${{ inputs.minor-version }}
+        Major_Version: ${{ inputs.major }}
+        Minor_Version: ${{ inputs.minor }}
