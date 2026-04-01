@@ -51,9 +51,7 @@ jobs:
           - Worker
     needs: [ variables, build-test ]
     steps:
-    - uses: actions/checkout@v6
-
-    - uses: ./.github/actions/build-publish-docker-image-action
+    - uses: sming-code/build-publish-docker-image-action@v1
       with:
         project-name-root: ${{ needs.variables.outputs.project-name-root }}
         image-name-root: ${{ needs.variables.outputs.image-name-root }}
