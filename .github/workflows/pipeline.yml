@@ -49,7 +49,7 @@ jobs:
           - Api
           - Worker
     needs: [ variables, build-test ]
-    uses: ./.github/actions/build-publish-docker-image
+    uses: ./.github/actions/build-publish-docker-image-action
     with:
       project-name: ${{ needs.variables.outputs.project-name-root }}
       image-name: ${{ needs.variables.outputs.image-name-root }}
