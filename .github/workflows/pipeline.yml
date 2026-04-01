@@ -15,17 +15,26 @@ jobs:
     name: Generate variables
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v6
+
+    - uses: ./.github/actions/get-version-no
+      id: get-version
+      with:
+        major: 1
+        minor: 0
     - name: Display done
       run: echo "Variables loaded..."
     outputs:
       project-name-root: DemoApp.Services.Customers
       image-name-root: demo-customer-svc
+      version-no: ${{ steps.get-version.outputs.version-no }}
+      last-release-tag: ${{ steps.get-version.outputs.last-release-tag }}
       
-  get-version-no:
-    uses: ./.github/workflows/get-version-no.yaml
-    with:
-      major-version: 1
-      minor-version: 0
+  output:
+    needs: [ variables ]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'details are ${{ needs.variables.outputs.project-name-root }}, ${{ needs.variables.outputs.image-name-root }}, ${{ needs.variables.outputs.version-no }} and ${{ needs.variables.outputs.last-release-tag }}'
 
   # build-test:
   #   uses: ./.github/workflows/build-test.yaml

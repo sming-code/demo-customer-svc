@@ -10,10 +10,10 @@ on:
         type: number
         required: true
     outputs:
-      last-version-tag:
+      last-release-tag:
         description: The tag for the previous release
         value: ${{ jobs.get-version-no.outputs.previousTag }}
-      next-version:
+      version-no:
         description: The version number to use for this build
         value: ${{ jobs.get-version-no.outputs.nextVersionNo }}
 
