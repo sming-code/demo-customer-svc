@@ -1,14 +1,11 @@
-name: Build Test
+name: Build and test
+description: 'Build and test all dotnet projects in this repo based on an slnx file'
 
-on:
-  workflow_call:
-
-jobs:
-  build-test:
-    name: Build and test
-    runs-on: ubuntu-latest
-    steps:
+runs:
+  using: "composite"
+  steps:
     - uses: actions/checkout@v6
+
     - name: Setup .Net
       uses: actions/setup-dotnet@v5
       with:
@@ -16,9 +13,15 @@ jobs:
         source-url: https://nuget.pkg.github.com/sming-code/index.json
       env:
         NUGET_AUTH_TOKEN: ${{ github.token }}
+
     - name: Restore dependencies
+      shell: bash
       run: dotnet restore
+
     - name: Build
+      shell: bash
       run: dotnet build --no-restore
+
     - name: Test
+      shell: bash
       run: dotnet test --no-build

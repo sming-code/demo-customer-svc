@@ -36,8 +36,13 @@ jobs:
     steps:
       - run: echo 'details are ${{ needs.variables.outputs.project-name-root }}, ${{ needs.variables.outputs.image-name-root }}, ${{ needs.variables.outputs.version-no }} and ${{ needs.variables.outputs.last-release-tag }}'
 
-  # build-test:
-  #   uses: ./.github/workflows/build-test.yaml
+  build-test:
+    name: Build Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+
+    - uses: ./.github/actions/build-test
 
   # build-api-docker-image:
   #   needs: [ variables, get-version-no ]
