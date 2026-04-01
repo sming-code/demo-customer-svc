@@ -52,12 +52,12 @@ jobs:
     needs: [ variables, build-test ]
     steps:
     - uses: actions/checkout@v6
-    
+
     - uses: ./.github/actions/build-publish-docker-image-action
       with:
-        project-name: ${{ needs.variables.outputs.project-name-root }}
-        image-name: ${{ needs.variables.outputs.image-name-root }}
-        dockerfile-name: Dockerfile
+        project-name-root: ${{ needs.variables.outputs.project-name-root }}
+        image-name-root: ${{ needs.variables.outputs.image-name-root }}
+        dockerfile-name-root: Dockerfile
         service-type: ${{ matrix.service-type }}
         version-number: ${{ needs.variables.outputs.version-no }}
 
