@@ -34,8 +34,19 @@ runs:
   - name: Get lower case service type
     id: lower-case-service-type
     shell: bash
-    run: echo "service-type-lower=${SERVICE_TYPE,,}" >> $GITHUB_OUTPUT
+    run: |
+      serviceTypeLower=${SERVICE_TYPE,,}
+      echo "$serviceTypeLower"
+      projectNameFull="$PROJECT_NAME_ROOT.$SERVICE_TYPE"
+      dockerfileNameFull="$DOCKERFILE_NAME_ROOT.$serviceTypeLower"
+      imageNameFull="$IMAGE_NAME_ROOT-$serviceTypeLower"
+      echo "project-name-full=$projectNameFull" >> $GITHUB_OUTPUT
+      echo "dockerfile-name-full=$dockerfileNameFull" >> $GITHUB_OUTPUT
+      echo "image-name-full=$imageNameFull" >> $GITHUB_OUTPUT
     env:
+      PROJECT_NAME_ROOT: ${{ inputs.project-name-root }}
+      DOCKERFILE_NAME_ROOT: ${{ inputs.dockerfile-name-root }}
+      IMAGE_NAME_ROOT: ${{ inputs.image-name-root }}
       SERVICE_TYPE: ${{ inputs.service-type }}
 
   - name: Set up Docker Buildx
@@ -43,18 +54,18 @@ runs:
 
   - name: Repoint dockerfile to point to correct project (needed particularly for entrypoint)
     shell: bash
-    run: sed -i -E 's/\$Project_Name/${{ inputs.project-name-root }}.${{ inputs.service-type }}/g' "${{ inputs.dockerfile-name-root }}.${{ steps.lower-case-service-type.outputs.service-type-lower }}"
+    run: sed -i -E 's/\$Project_Name/${{ steps.lower-case-service-type.outputs.project-name-full }}/g' "${{ steps.lower-case-service-type.outputs.dockerfile-name-full }}"
 
   - name: Build docker image
     uses: docker/build-push-action@v7
     with:
       context: .
-      file: ${{ inputs.dockerfile-name-root }}.${{ steps.lower-case-service-type.outputs.service-type-lower }}
+      file: ${{ steps.lower-case-service-type.outputs.dockerfile-name-full }}
       build-args: |
         Nuget_CustomFeedUserName=USERNAME
         Nuget_CustomFeedPassword=${{ github.token }}
       tags: |
-        ${{ inputs.image-name-root }}-${{ steps.lower-case-service-type.outputs.service-type-lower }}:${{ inputs.version-number }}
+        ${{ steps.lower-case-service-type.outputs.image-name-full }}:${{ inputs.version-number }}
       outputs: type=docker,dest=${{ runner.temp }}/docker-image.tar
 
   - name: Load image
@@ -66,10 +77,10 @@ runs:
   - name: Publish to GPR
     shell: bash
     run: |
-      docker tag ${{ inputs.image-name-root }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-root }}:latest
-      docker tag ${{ inputs.image-name-root }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-root }}:${{ inputs.version-number }}
-      docker push ghcr.io/sming-code/${{ inputs.image-name-root }}:latest
-      docker push ghcr.io/sming-code/${{ inputs.image-name-root }}:${{ inputs.version-number }}
+      docker tag ${{ inputs.image-name-full }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-full }}:latest
+      docker tag ${{ inputs.image-name-full }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-full }}:${{ inputs.version-number }}
+      docker push ghcr.io/sming-code/${{ inputs.image-name-full }}:latest
+      docker push ghcr.io/sming-code/${{ inputs.image-name-full }}:${{ inputs.version-number }}
 
   # - name: Upload artifact
   #   uses: actions/upload-artifact@v7
