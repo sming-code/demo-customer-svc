@@ -1,0 +1,65 @@
+name: Build docker image
+description: 'Build docker image and upload as artifact'
+
+inputs:
+  project-name-root:
+    description: The name of the project for this build
+    required: true
+  dockerfile-name-root:
+    description: The name of the dockerfile to use
+    required: true
+  image-name-root:
+    description: The name of the docker image to generate
+    required: true
+  service-type:
+    description: The type of service being deployed
+    required: true
+  version-number:
+    description: The version to give to nuget packages
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - uses: actions/checkout@v6
+
+  - name: Setup .Net
+    uses: actions/setup-dotnet@v5
+    with:
+      dotnet-version: 10.0.x
+      source-url: https://nuget.pkg.github.com/sming-code/index.json
+    env:
+      NUGET_AUTH_TOKEN: ${{ github.token }}
+
+  - name: Get lower case service type
+    id: lower-case-service-type
+    shell: bash
+    run: echo "service-type-lower=${SERVICE_TYPE,,}" >> $GITHUB_OUTPUT
+    env:
+      SERVICE_TYPE: ${{ inputs.version-number }}
+
+  - name: Set up Docker Buildx
+    uses: docker/setup-buildx-action@v4
+
+  - name: Repoint dockerfile to point to correct project (needed particularly for entrypoint)
+    shell: bash
+    run: sed -i -E 's/\$Project_Name/${{ inputs.project-name }}.${{ inputs.service-type }}/g' "${{ inputs.dockerfile-name }}"
+
+  - name: Build docker image
+    uses: docker/build-push-action@v7
+    with:
+      context: .
+      file: ${{ inputs.dockerfile-name }}.${{ steps.lower-case-service-type.outputs.service-type-lower }}
+      build-args: |
+        Nuget_CustomFeedUserName=USERNAME
+        Nuget_CustomFeedPassword=${{ github.token }}
+      tags: |
+        ${{ inputs.image-name }}-${{ steps.lower-case-service-type.outputs.service-type-lower }}:${{ inputs.version-number }}
+      outputs: type=docker,dest=${{ runner.temp }}/docker-image.tar
+
+  - name: Upload artifact
+    uses: actions/upload-artifact@v7
+    with:
+      name: ${{ inputs.service-type }}
+      path: ${{ runner.temp }}/docker-image.tar
+      retention-days: 5

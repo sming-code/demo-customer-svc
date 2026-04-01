@@ -40,14 +40,22 @@ jobs:
     steps:
     - uses: sming-code/build-test-action@v1
 
-  # build-api-docker-image:
-  #   needs: [ variables, get-version-no ]
-  #   uses: ./.github/workflows/build-docker-image.yaml
-  #   with:
-  #     project-name: ${{ needs.variables.outputs.project-name-root }}.Api
-  #     image-name: ${{ needs.variables.outputs.image-name-root }}-api
-  #     dockerfile-name: Dockerfile.api
-  #     version-number: ${{ needs.get-version-no.outputs.next-version }}
+  build-docker-images:
+    name: Build docker images
+    strategy:
+      fail-fast: true
+      matrix:
+        service-type:
+          - Api
+          - Worker
+    needs: [ variables, build-test ]
+    uses: ./.github/actions/build-publish-docker-image
+    with:
+      project-name: ${{ needs.variables.outputs.project-name-root }}
+      image-name: ${{ needs.variables.outputs.image-name-root }}
+      dockerfile-name: Dockerfile
+      service-type: ${{ matrix.service-type }}
+      version-number: ${{ needs.variables.outputs.version-no }}
 
   # build-worker-docker-image:
   #   needs: [ variables, get-version-no ]
