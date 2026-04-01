@@ -43,7 +43,7 @@ runs:
 
   - name: Repoint dockerfile to point to correct project (needed particularly for entrypoint)
     shell: bash
-    run: sed -i -E 's/\$Project_Name/${{ inputs.project-name }}.${{ inputs.service-type }}/g' "${{ inputs.dockerfile-name }}"
+    run: sed -i -E 's/\$Project_Name/${{ inputs.project-name }}.${{ inputs.service-type }}/g' "${{ inputs.dockerfile-name }}.${{ steps.lower-case-service-type.outputs.service-type-lower }}"
 
   - name: Build docker image
     uses: docker/build-push-action@v7
