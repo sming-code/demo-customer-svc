@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
-    - uses: sming-code/get-version-no@v1
+    - uses: sming-code/get-version-no-action@v1
       id: get-version
       with:
         major: 1
