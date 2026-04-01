@@ -74,13 +74,20 @@ runs:
       docker load --input ${{ runner.temp }}/docker-image.tar
       docker image ls -a
 
+  - name: Login to Github Container Registry
+    uses: docker/login-action@v4
+    with:
+      registry: ghcr.io/sming-code
+      username: ${{ github.repository_owner }}
+      password: ${{ github.token }}
+
   - name: Publish to GPR
     shell: bash
     run: |
-      docker tag ${{ inputs.image-name-full }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-full }}:latest
-      docker tag ${{ inputs.image-name-full }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ inputs.image-name-full }}:${{ inputs.version-number }}
-      docker push ghcr.io/sming-code/${{ inputs.image-name-full }}:latest
-      docker push ghcr.io/sming-code/${{ inputs.image-name-full }}:${{ inputs.version-number }}
+      docker tag ${{ steps.lower-case-service-type.outputs.image-name-full }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ steps.lower-case-service-type.outputs.image-name-full }}:latest
+      docker tag ${{ steps.lower-case-service-type.outputs.image-name-full }}:${{ inputs.version-number }} ghcr.io/sming-code/${{ steps.lower-case-service-type.outputs.image-name-full }}:${{ inputs.version-number }}
+      docker push ghcr.io/sming-code/${{ steps.lower-case-service-type.outputs.image-name-full }}:latest
+      docker push ghcr.io/sming-code/${{ steps.lower-case-service-type.outputs.image-name-full }}:${{ inputs.version-number }}
 
   # - name: Upload artifact
   #   uses: actions/upload-artifact@v7
