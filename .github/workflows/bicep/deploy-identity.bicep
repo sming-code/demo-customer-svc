@@ -8,7 +8,7 @@ resource appUserAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentiti
 }
 
 resource environmentKeyvault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
-  name: 'kv-sming-${environment}-001'
+  name: 'kv-${environment}-tag'
 }
 
 resource keyvaultPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2025-05-01' = {

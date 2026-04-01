@@ -44,3 +44,17 @@ jobs:
     - name: Display resource group name
       run: |
         echo "${{ needs.create-resource-group.outputs.resource-group-name }}"
+
+  push-to-container-app:
+    name: Push image to container app
+    needs: [ variables, get-version-no, create-resource-group ]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/push-to-container-app.yml
+    with:
+      image-name: demo-customer-svc-worker
+      version-number: 1.0.2
+      resource-group: rg-dev-tag
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
