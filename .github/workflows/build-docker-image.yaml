@@ -42,16 +42,13 @@ jobs:
         source-url: https://nuget.pkg.github.com/sming-code/index.json
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v4
+
     - name: Repoint dockerfile to point to correct project (needed particularly for entrypoint)
       run: sed -i -E 's/\$Project_Name/${{ inputs.project-name }}/g' "${{ inputs.dockerfile-name }}"
+
     - name: Build docker image
       uses: docker/build-push-action@v7
       with:
@@ -63,11 +60,13 @@ jobs:
         tags: |
           ${{ inputs.image-name }}:${{ inputs.version-number }}
         outputs: type=docker,dest=${{ runner.temp }}/docker-image.tar
+
     - name: generate random archive file name
       id: getArchiveName
       run: |
         archiveName="$(uuidgen)"
         echo "ARCHIVE_NAME=$archiveName" >> $GITHUB_OUTPUT
+
     - name: Upload artifact
       uses: actions/upload-artifact@v7
       with:

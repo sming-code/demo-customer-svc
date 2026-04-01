@@ -1,11 +1,17 @@
 name: Build and Test Worker.
 
 on:
-  pull_request:
-    branches: [ main ]
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      project-name:
+        type: string
+        required: true
+      image-name:
+        type: string
+        required: true
+      dockerfile-name:
+        type: string
+        required: true
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

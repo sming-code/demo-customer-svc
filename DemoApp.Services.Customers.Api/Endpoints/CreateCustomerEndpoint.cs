@@ -13,7 +13,11 @@ public class CreateCustomerEndpoint : IMinimalEndpoint
                 LinkGenerator linkGenerator
             ) =>
             {
-                var newCustomerIdentifier = await customerService.CreateCustomer(
+                // var newCustomerIdentifier = await customerService.CreateCustomer(
+                //     newCustomer.FirstName,
+                //     newCustomer.Surname
+                // );
+                var newCustomerIdentifier = FakeStorage.AddCustomer(
                     newCustomer.FirstName,
                     newCustomer.Surname
                 );

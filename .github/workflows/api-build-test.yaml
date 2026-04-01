@@ -1,0 +1,87 @@
+name: Build and Test Api.
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        type: string
+        required: true
+      image-name:
+        type: string
+        required: true
+      dockerfile-name:
+        type: string
+        required: true
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+jobs:
+  variables:
+    name: Generate variables
+    runs-on: ubuntu-latest
+    steps:
+    - name: Display done
+      run: echo "Variables loaded..."
+    outputs:
+      project-name: DemoApp.Services.Customers.Api
+      image-name: demo-customer-svc-api
+      dockerfile-name: Dockerfile.api
+      
+  get-version-no:
+    uses: ./.github/workflows/get-version-no.yaml
+
+  build-test-create-docker-image:
+    name: Build and Test
+    needs: [ variables, get-version-no ]
+    uses: ./.github/workflows/build-test.yml
+    with:
+      project-name: ${{ needs.variables.outputs.project-name }}
+      image-name: ${{ needs.variables.outputs.image-name }}
+      dockerfile-name: ${{ needs.variables.outputs.dockerfile-name }}
+      version-number: ${{ needs.get-version-no.outputs.next-version }}
+
+  publish-docker-image:
+    name: Publish docker image
+    needs: [ variables, get-version-no, build-test-create-docker-image ]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/publish-docker-image.yml
+    with:
+      image-name: ${{ needs.variables.outputs.image-name }}
+      version-number: ${{ needs.get-version-no.outputs.next-version }}
+      archive-name: ${{ needs.build-test-create-docker-image.outputs.archive-file-name }}
+
+  create-resource-group:
+    name: Create resource group for container app
+    needs: [ variables, publish-docker-image ]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/create-resource-group.yml
+    with:
+      container-app-name: ${{ needs.variables.outputs.image-name }}
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  push-to-container-app:
+    name: Push image to container app
+    needs: [ variables, get-version-no, create-resource-group ]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/push-to-container-app.yml
+    with:
+      image-name: ${{ needs.variables.outputs.image-name }}
+      version-number: ${{ needs.get-version-no.outputs.next-version }}
+      resource-group: ${{ needs.create-resource-group.outputs.resource-group-id }}
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  create-release:
+    name: Create release
+    needs: [ get-version-no, push-to-container-app ]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/add-github-release.yml
+    with:
+      version-number: ${{ needs.get-version-no.outputs.next-version }}
+      previous-tag: ${{ needs.get-version-no.outputs.last-version-tag }}

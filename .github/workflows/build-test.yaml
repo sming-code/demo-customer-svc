@@ -1,0 +1,27 @@
+name: Build Test
+
+on:
+  workflow_call:
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: Setup .Net
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 10.0.x
+        source-url: https://nuget.pkg.github.com/sming-code/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build
