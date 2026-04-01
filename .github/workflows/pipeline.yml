@@ -42,6 +42,7 @@ jobs:
 
   build-docker-images:
     name: Build docker images
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
@@ -49,13 +50,16 @@ jobs:
           - Api
           - Worker
     needs: [ variables, build-test ]
-    uses: ./.github/actions/build-publish-docker-image-action
-    with:
-      project-name: ${{ needs.variables.outputs.project-name-root }}
-      image-name: ${{ needs.variables.outputs.image-name-root }}
-      dockerfile-name: Dockerfile
-      service-type: ${{ matrix.service-type }}
-      version-number: ${{ needs.variables.outputs.version-no }}
+    steps:
+    - uses: actions/checkout@v6
+    
+    - uses: ./.github/actions/build-publish-docker-image-action
+      with:
+        project-name: ${{ needs.variables.outputs.project-name-root }}
+        image-name: ${{ needs.variables.outputs.image-name-root }}
+        dockerfile-name: Dockerfile
+        service-type: ${{ matrix.service-type }}
+        version-number: ${{ needs.variables.outputs.version-no }}
 
   # build-worker-docker-image:
   #   needs: [ variables, get-version-no ]
