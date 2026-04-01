@@ -15,6 +15,7 @@ jobs:
     name: Generate variables
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v6
     - id: test
       uses: ./.github/workflows/get-version-no.yaml
 
