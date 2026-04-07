@@ -59,15 +59,6 @@ jobs:
         service-type: ${{ matrix.service-type }}
         version-number: ${{ needs.variables.outputs.version-no }}
 
-  # build-worker-docker-image:
-  #   needs: [ variables, get-version-no ]
-  #   uses: ./.github/workflows/build-docker-image.yaml
-  #   with:
-  #     project-name: ${{ needs.variables.outputs.project-name-root }}.Worker
-  #     image-name: ${{ needs.variables.outputs.image-name-root }}-worker
-  #     dockerfile-name: Dockerfile.worker
-  #     version-number: ${{ needs.get-version-no.outputs.next-version }}
-
   # create-resource-group:
   #   name: Create resource group for container app
   #   needs: [ variables, publish-docker-image ]

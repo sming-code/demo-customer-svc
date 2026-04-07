@@ -1,4 +1,4 @@
-namespace DemoApp.Services.Customers.Domain.Definition.Dtos;
+namespace DemoApp.Services.Customers.Domain.Dtos;
 
 public record CustomerDto(
     Guid CustomerIdentifier,
