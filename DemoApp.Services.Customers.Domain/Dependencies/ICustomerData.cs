@@ -1,5 +1,5 @@
 namespace DemoApp.Services.Customers.Domain.Dependencies;
-using Definition.Dtos;
+using Dtos;
 
 public interface ICustomerData
 {

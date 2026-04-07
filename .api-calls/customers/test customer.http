@@ -1,0 +1,13 @@
+# @rootUrl = localhost:5245
+@rootUrl = https://apim-dev-tag.azure-api.net
+@firstName = Matt
+@surname = Astill2
+
+POST {{rootUrl}}/customer HTTP/1.1
+Ocp-Apim-Subscription-Key: 55a6b76fcd5045008f815919d580fef6
+Content-Type: application/json
+
+{
+    "firstName": "{{firstName}}",
+    "surname": "{{surname}}"
+}
