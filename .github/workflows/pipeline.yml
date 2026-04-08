@@ -27,12 +27,6 @@ jobs:
       image-name-root: demo-customer-svc
       version-no: ${{ steps.get-version.outputs.version-no }}
       last-release-tag: ${{ steps.get-version.outputs.last-release-tag }}
-      
-  output:
-    needs: [ variables ]
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo 'details are ${{ needs.variables.outputs.project-name-root }}, ${{ needs.variables.outputs.image-name-root }}, ${{ needs.variables.outputs.version-no }} and ${{ needs.variables.outputs.last-release-tag }}'
 
   build-test:
     name: Build Test
@@ -103,11 +97,11 @@ jobs:
   #     AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   #     AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-  # create-release:
-  #   name: Create release
-  #   needs: [ get-version-no, push-to-container-app ]
-  #   if: ${{ github.ref == 'refs/heads/main' }}
-  #   uses: ./.github/workflows/add-github-release.yml
-  #   with:
-  #     version-number: ${{ needs.get-version-no.outputs.next-version }}
-  #     previous-tag: ${{ needs.get-version-no.outputs.last-version-tag }}
+  create-release:
+    name: Create release
+    needs: [ variables, build-docker-images ]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/add-github-release.yaml
+    with:
+      version-number: ${{ needs.variables.outputs.version-no }}
+      previous-tag: ${{ needs.variables.outputs.last-release-tag }}
