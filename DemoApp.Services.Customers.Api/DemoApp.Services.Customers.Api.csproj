@@ -8,7 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
-    <PackageReference Include="SmingCode.Utilities.MinimalApi" Version="1.0.7" />
+    <PackageReference Include="SmingCode.Utilities.MinimalApi" Version="1.0.8" />
+    <PackageReference Include="SmingCode.Utilities.Logging.AspNetCore" Version="1.0.8" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking" Version="1.0.8" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking.WebApi" Version="1.0.8" />
+    <PackageReference Include="SmingCode.Utilities.ServiceMetadata" Version="1.0.8" />
   </ItemGroup>
 
   <ItemGroup>

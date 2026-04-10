@@ -387,10 +387,13 @@ Program.cs
  System.Xml.XPath.XDocument.dll
  WindowsBase.dll
 <NUGET>/
- azure.core/1.47.1/lib/net8.0/Azure.Core.dll
+ azure.core/1.52.0/lib/net10.0/Azure.Core.dll
  azure.identity/1.14.2/lib/net8.0/Azure.Identity.dll
+ azure.monitor.opentelemetry.aspnetcore/1.4.0/lib/net8.0/Azure.Monitor.OpenTelemetry.AspNetCore.dll
+ azure.monitor.opentelemetry.exporter/1.7.0/lib/net10.0/Azure.Monitor.OpenTelemetry.Exporter.dll
+ microsoft.applicationinsights/3.1.0/lib/net10.0/Microsoft.ApplicationInsights.dll
  microsoft.aspnetcore.openapi/10.0.1/lib/net10.0/Microsoft.AspNetCore.OpenApi.dll
- microsoft.bcl.asyncinterfaces/8.0.0/lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll
+ microsoft.bcl.asyncinterfaces/10.0.3/lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll
  microsoft.bcl.cryptography/9.0.4/lib/net9.0/Microsoft.Bcl.Cryptography.dll
  microsoft.data.sqlclient/6.1.1/ref/net9.0/Microsoft.Data.SqlClient.dll
  microsoft.entityframeworkcore.abstractions/10.0.2/lib/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll
@@ -407,10 +410,22 @@ Program.cs
  microsoft.identitymodel.tokens/7.7.1/lib/net8.0/Microsoft.IdentityModel.Tokens.dll
  microsoft.openapi/2.0.0/lib/net8.0/Microsoft.OpenApi.dll
  microsoft.sqlserver.server/1.0.0/lib/netstandard2.0/Microsoft.SqlServer.Server.dll
- smingcode.utilities.minimalapi/1.0.7/lib/net10.0/SmingCode.Utilities.MinimalApi.dll
- system.clientmodel/1.5.1/lib/net8.0/System.ClientModel.dll
+ opentelemetry.api.providerbuilderextensions/1.15.1/lib/net10.0/OpenTelemetry.Api.ProviderBuilderExtensions.dll
+ opentelemetry.api/1.15.1/lib/net10.0/OpenTelemetry.Api.dll
+ opentelemetry.extensions.hosting/1.15.1/lib/net10.0/OpenTelemetry.Extensions.Hosting.dll
+ opentelemetry.instrumentation.aspnetcore/1.14.0/lib/net10.0/OpenTelemetry.Instrumentation.AspNetCore.dll
+ opentelemetry.instrumentation.http/1.14.0/lib/net10.0/OpenTelemetry.Instrumentation.Http.dll
+ opentelemetry.persistentstorage.abstractions/1.0.2/lib/netstandard2.0/OpenTelemetry.PersistentStorage.Abstractions.dll
+ opentelemetry.persistentstorage.filesystem/1.0.2/lib/netstandard2.0/OpenTelemetry.PersistentStorage.FileSystem.dll
+ opentelemetry/1.15.1/lib/net10.0/OpenTelemetry.dll
+ smingcode.utilities.logging.aspnetcore/1.0.8/lib/net10.0/SmingCode.Utilities.Logging.AspNetCore.dll
+ smingcode.utilities.minimalapi/1.0.8/lib/net10.0/SmingCode.Utilities.MinimalApi.dll
+ smingcode.utilities.processtracking.webapi/1.0.8/lib/net10.0/SmingCode.Utilities.ProcessTracking.WebApi.dll
+ smingcode.utilities.processtracking/1.0.8/lib/net10.0/SmingCode.Utilities.ProcessTracking.dll
+ smingcode.utilities.servicemetadata/1.0.8/lib/net10.0/SmingCode.Utilities.ServiceMetadata.dll
+ system.clientmodel/1.10.0/lib/net10.0/System.ClientModel.dll
  system.identitymodel.tokens.jwt/7.7.1/lib/net8.0/System.IdentityModel.Tokens.Jwt.dll
- system.memory.data/8.0.1/lib/net8.0/System.Memory.Data.dll
+ system.memory.data/10.0.3/lib/net10.0/System.Memory.Data.dll
  system.security.cryptography.pkcs/9.0.4/lib/net9.0/System.Security.Cryptography.Pkcs.dll
  system.security.cryptography.protecteddata/9.0.4/lib/net9.0/System.Security.Cryptography.ProtectedData.dll
 
@@ -443,7 +458,7 @@ Program.cs
 <NUGET>/
  microsoft.aspnetcore.openapi/10.0.1/analyzers/dotnet/cs/Microsoft.AspNetCore.OpenApi.SourceGenerators.dll
  microsoft.entityframeworkcore.analyzers/10.0.2/analyzers/dotnet/cs/Microsoft.EntityFrameworkCore.Analyzers.dll
- system.clientmodel/1.5.1/analyzers/dotnet/cs/System.ClientModel.SourceGeneration.dll
+ system.clientmodel/1.10.0/analyzers/dotnet/cs/System.ClientModel.SourceGeneration.dll
 
 [analyzerConfigFiles]
 <DOTNET>/sdk/10.0.105/Sdks/Microsoft.NET.Sdk/analyzers/build/config/analysislevel_10_default.globalconfig

@@ -261,10 +261,10 @@ Program.cs
  microsoft.extensions.options.configurationextensions/10.0.5/lib/net10.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll
  microsoft.extensions.options/10.0.5/lib/net10.0/Microsoft.Extensions.Options.dll
  microsoft.extensions.primitives/10.0.5/lib/net10.0/Microsoft.Extensions.Primitives.dll
- smingcode.utilities.applicationsettings/1.0.7/lib/net10.0/SmingCode.Utilities.ApplicationSettings.dll
- smingcode.utilities.delegateinvokers/1.0.7/lib/net10.0/SmingCode.Utilities.DelegateInvokers.dll
- smingcode.utilities.kafka.minimalconsumers/1.0.7/lib/net10.0/SmingCode.Utilities.Kafka.MinimalConsumers.dll
- smingcode.utilities.kafka/1.0.7/lib/net10.0/SmingCode.Utilities.Kafka.dll
+ smingcode.utilities.delegateinvokers/1.0.8/lib/net10.0/SmingCode.Utilities.DelegateInvokers.dll
+ smingcode.utilities.kafka.minimalconsumers/1.0.8/lib/net10.0/SmingCode.Utilities.Kafka.MinimalConsumers.dll
+ smingcode.utilities.kafka/1.0.8/lib/net10.0/SmingCode.Utilities.Kafka.dll
+ smingcode.utilities.servicemetadata/1.0.8/lib/net10.0/SmingCode.Utilities.ServiceMetadata.dll
  system.diagnostics.eventlog/10.0.5/lib/net10.0/System.Diagnostics.EventLog.dll
 
 [analyzerReferences]

@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
-    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.7" />
-    <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.7" />
+    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.8" />
+    <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.8" />
   </ItemGroup>
 
 </Project>
