@@ -10,12 +10,10 @@ public class GetAllCustomersEndpoint : IMinimalEndpoint
                 [FromServices] ICustomerService customerService
             ) =>
             {
-                // var allCustomers = await customerService.GetAllCustomers();
+                var allCustomers = await customerService.GetAllCustomers();
 
-                // var response = allCustomers
-                //     .Select(customer => customer.ToModel());
-
-                var response = FakeStorage.GetAll();
+                var response = allCustomers
+                    .Select(customer => customer.ToModel());
 
                 return Results.Ok(
                     response

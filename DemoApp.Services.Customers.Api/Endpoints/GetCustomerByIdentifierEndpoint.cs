@@ -11,14 +11,12 @@ public class GetCustomerByIdentifierEndpoint : IMinimalEndpoint
                 [FromServices] ICustomerService customerService
             ) =>
             {
-                // var customerDto = await customerService.GetCustomerByIdentifier(
-                //     customerIdentifier
-                // );
+                var customerDto = await customerService.GetCustomerByIdentifier(
+                    customerIdentifier
+                );
 
-                // var customerModel = customerDto.ToModel();
+                var customerModel = customerDto.ToModel();
 
-                var customerModel = FakeStorage.GetById(customerIdentifier);
-                
                 return Results.Ok(
                     customerModel
                 );

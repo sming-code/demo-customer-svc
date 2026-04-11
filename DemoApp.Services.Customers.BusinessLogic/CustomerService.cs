@@ -3,7 +3,6 @@ using DemoApp.Services.Customers.Domain.Dtos;
 namespace DemoApp.Services.Customers.BusinessLogic;
 
 internal class CustomerService(
-    ICustomerApi _customerApi,
     ICustomerData _customerData
 ) : ICustomerService
 {
@@ -15,7 +14,7 @@ internal class CustomerService(
         surname
     );
     public async Task<CustomerDto[]> GetAllCustomers()
-        => await _customerApi.GetAll();
+        => await _customerData.GetAllCustomers();
 
     public async Task<CustomerDto> GetCustomerByIdentifier(
         Guid customerIdentifier
