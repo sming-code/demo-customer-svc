@@ -1,9 +1,9 @@
 using DemoApp.Services.Customers.BusinessLogic;
 using SmingCode.Utilities.Logging.AspNetCore;
-using SmingCode.Utilities.MinimalApi;
 using SmingCode.Utilities.ProcessTracking;
 using SmingCode.Utilities.ProcessTracking.WebApi;
 using SmingCode.Utilities.ServiceMetadata;
+using SmingCode.Utilities.StartupProcesses.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -33,6 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseProcessTrackingMiddleware();
+await app.RunUserDefinedStartupProcesses();
 // app.UseHttpsRedirection();
 
 app.Run();

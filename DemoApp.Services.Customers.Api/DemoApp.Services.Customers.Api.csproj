@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
     <ProjectReference Include="..\DemoApp.Services.Customers.BusinessLogic\DemoApp.Services.Customers.BusinessLogic.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.StartupProcesses.AspNetCore\SmingCode.Utilities.StartupProcesses.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

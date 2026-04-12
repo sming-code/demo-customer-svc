@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SmingCode.Utilities.StartupProcesses.AspNetCore;
 
 namespace DemoApp.Services.Customers.Dependencies;
 using Databases.Customers;
@@ -23,6 +24,8 @@ public static class DependencyInjection
         {
             options.UseSqlite(customersDbConnString);
         });
+
+        services.AddScoped<IServiceInitializer, DatabaseInitialization>();
 
         return services;
     }
