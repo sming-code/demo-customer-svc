@@ -13,4 +13,9 @@
     <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
+    <ProjectReference Include="..\DemoApp.Services.Customers.BusinessLogic\DemoApp.Services.Customers.BusinessLogic.csproj" />
+  </ItemGroup>
+
 </Project>
