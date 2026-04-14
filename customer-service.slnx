@@ -5,6 +5,4 @@
   <Project Path="DemoApp.Services.Customers.Dependencies/DemoApp.Services.Customers.Dependencies.csproj" />
   <Project Path="DemoApp.Services.Customers.Domain/DemoApp.Services.Customers.Domain.csproj" />
   <Project Path="DemoApp.Services.Customers.Worker/DemoApp.Services.Customers.Worker.csproj" />
-  <Project Path="SmingCode.Utilities.StartupProcesses.AspNetCore/SmingCode.Utilities.StartupProcesses.AspNetCore.csproj" />
-  <Project Path="SmingCode.Utilities.StartupProcesses/SmingCode.Utilities.StartupProcesses.csproj" />
 </Solution>

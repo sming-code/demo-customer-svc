@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SmingCode.Utilities.StartupProcesses.AspNetCore;
+using SmingCode.Utilities.StartupProcesses;
 
 namespace DemoApp.Services.Customers.Dependencies;
 using Databases.Customers.Context;
@@ -13,12 +13,13 @@ internal class DatabaseInitialization : IServiceInitializer
             ILogger<DatabaseInitialization> logger
         ) =>
         {
-            logger.LogInformation(
-                "Got inside database initialization. db connection string is {connString}",
-                customerContext.Database.GetConnectionString()
-            );
-
-            File.WriteAllText("/data/test-write.txt", "Hello there");
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation(
+                    "Got inside database initialization. db connection string is {connString}",
+                    customerContext.Database.GetConnectionString()
+                );
+            }
 
             customerContext.Database.Migrate();
         };

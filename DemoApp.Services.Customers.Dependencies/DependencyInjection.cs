@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using SmingCode.Utilities.StartupProcesses.AspNetCore;
+using SmingCode.Utilities.StartupProcesses;
 
 namespace DemoApp.Services.Customers.Dependencies;
 using Databases.Customers;

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SmingCode.Utilities.StartupProcesses" Version="1.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -18,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
-    <ProjectReference Include="..\SmingCode.Utilities.StartupProcesses.AspNetCore\SmingCode.Utilities.StartupProcesses.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

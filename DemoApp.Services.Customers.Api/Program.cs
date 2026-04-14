@@ -3,7 +3,7 @@ using SmingCode.Utilities.Logging.AspNetCore;
 using SmingCode.Utilities.ProcessTracking;
 using SmingCode.Utilities.ProcessTracking.WebApi;
 using SmingCode.Utilities.ServiceMetadata;
-using SmingCode.Utilities.StartupProcesses.AspNetCore;
+using SmingCode.Utilities.StartupProcesses;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -34,6 +34,5 @@ if (app.Environment.IsDevelopment())
 
 app.UseProcessTrackingMiddleware();
 await app.RunUserDefinedStartupProcesses();
-// app.UseHttpsRedirection();
 
 app.Run();

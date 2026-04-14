@@ -8,17 +8,17 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
-    <PackageReference Include="SmingCode.Utilities.MinimalApi" Version="1.0.8" />
-    <PackageReference Include="SmingCode.Utilities.Logging.AspNetCore" Version="1.0.8" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking" Version="1.0.8" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking.WebApi" Version="1.0.8" />
-    <PackageReference Include="SmingCode.Utilities.ServiceMetadata" Version="1.0.8" />
+    <PackageReference Include="SmingCode.Utilities.MinimalApi" Version="1.0.9" />
+    <PackageReference Include="SmingCode.Utilities.Logging.AspNetCore" Version="1.0.9" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking" Version="1.0.9" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking.WebApi" Version="1.0.9" />
+    <PackageReference Include="SmingCode.Utilities.ServiceMetadata" Version="1.0.9" />
+    <PackageReference Include="SmingCode.Utilities.StartupProcesses" Version="1.0.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
     <ProjectReference Include="..\DemoApp.Services.Customers.BusinessLogic\DemoApp.Services.Customers.BusinessLogic.csproj" />
-    <ProjectReference Include="..\SmingCode.Utilities.StartupProcesses.AspNetCore\SmingCode.Utilities.StartupProcesses.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>
