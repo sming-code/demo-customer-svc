@@ -10,14 +10,14 @@ internal class CustomerData(
 ) : ICustomerData
 {
     public async Task<Guid> CreateCustomer(
-        string firstName,
-        string surname
+        CustomerDto customerDto
     )
     {
         var newEntity = new Customer
         {
-            FirstName = firstName,
-            Surname = surname
+            CustomerId = customerDto.CustomerIdentifier,
+            FirstName = customerDto.FirstName,
+            Surname = customerDto.Surname
         };
 
         _customerContext.Add(newEntity);

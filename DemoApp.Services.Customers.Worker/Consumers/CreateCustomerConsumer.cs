@@ -1,6 +1,4 @@
 using System.Text.Json;
-using SmingCode.Utilities.Kafka;
-using SmingCode.Utilities.Kafka.MinimalConsumers;
 
 namespace DemoApp.Services.Customers.Worker;
 using Models;
@@ -11,27 +9,29 @@ public class CreateCustomerConsumer : IMinimalConsumer
         builder.MapConsumer(
             "customer-create",
             async (
-                [FromEventValue] CreateCustomerModel customerModel,
+                [FromEventValue] CustomerDto customerDto,
                 ICustomerService customerService,
                 ILogger<CreateCustomerConsumer> logger
             ) =>
             {
-                logger.LogInformation(
-                    "Received message on customer-create topic, with value '{EventValue}'",
-                    JsonSerializer.Serialize(customerModel)
-                );
+                if (logger.IsEnabled(LogLevel.Information))
+                {
+                    logger.LogInformation(
+                        "Received message on customer-create topic, with value '{EventValue}'",
+                        JsonSerializer.Serialize(customerDto)
+                    );                    
+                }
 
-                var newCustomerId = await customerService.CreateCustomer(
-                    customerModel.FirstName,
-                    customerModel.Surname
+                await customerService.CreateCustomer(
+                    customerDto
                 );
 
                 logger.LogInformation(
                     "Customer created with id {Customer Id}",
-                    newCustomerId
+                    customerDto.CustomerIdentifier
                 );
 
                 return KafkaEventResult.Complete;
             }
-        ).CreateTopicIfNotExists();
+        );
 }

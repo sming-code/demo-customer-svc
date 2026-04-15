@@ -16,7 +16,7 @@ public class CreateCustomerEndpoint : IMinimalEndpoint
             {
                 logger.LogInformation("Loading customer information from FakeStorage");
 
-                var newCustomerIdentifier = await customerService.CreateCustomer(
+                var newCustomerIdentifier = await customerService.QueueCreateCustomer(
                     newCustomer.FirstName,
                     newCustomer.Surname
                 );

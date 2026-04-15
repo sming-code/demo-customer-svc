@@ -13,7 +13,6 @@ var services = builder.Services;
 services.AddOpenApi();
 
 services.InitializeServiceMetadata();
-
 builder.InitializeLogging();
 
 services.InitialiseBusinessLogic(builder.Configuration);
