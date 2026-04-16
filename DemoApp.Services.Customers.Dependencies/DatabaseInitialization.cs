@@ -26,6 +26,10 @@ internal class DatabaseInitialization : IServiceInitializer
             if (pendingMigrations.Any())
             {
                 customerContext.Database.Migrate();
+
+                await customerContext.Database.ExecuteSqlRawAsync(
+                    "PRAGMA journal_mode=DELETE;"
+                );
             }
         };
 }
