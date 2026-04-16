@@ -1,18 +1,24 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace DemoApp.Services.Customers.Dependencies.Databases.Customers;
+
+using System.Text.Json;
 using Context;
 using Context.Models;
 using Mappers;
+using Microsoft.Extensions.Logging;
 
 internal class CustomerData(
-    CustomerContext _customerContext
+    CustomerContext _customerContext,
+    ILogger<CustomerData> _logger
 ) : ICustomerData
 {
     public async Task<Guid> CreateCustomer(
         CustomerDto customerDto
     )
     {
+        await using var transaction = await _customerContext.Database.BeginTransactionAsync();
+
         var newEntity = new Customer
         {
             CustomerId = customerDto.CustomerIdentifier,
@@ -23,6 +29,14 @@ internal class CustomerData(
         _customerContext.Add(newEntity);
 
         await _customerContext.SaveChangesAsync();
+
+        await transaction.CommitAsync();
+
+        var updatedSet = await _customerContext.Customers
+            .ToListAsync();
+        var message = JsonSerializer.Serialize(updatedSet);
+        _logger.LogInformation(message);
+
         return newEntity.CustomerId;
     }
 
@@ -44,6 +58,9 @@ internal class CustomerData(
             )
             ?? throw new Exception("Not good");
 
+        var message = JsonSerializer.Serialize(customerEntity);
+
+        _logger.LogInformation(message);
         return customerEntity.ToDto();
     }
 }
