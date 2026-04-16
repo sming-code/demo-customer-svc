@@ -6,7 +6,7 @@ using Context.Models;
 using Mappers;
 
 internal class CustomerData(
-    CustomerContext _customerContext,
+    CustomerContext _customerContext
 ) : ICustomerData
 {
     public async Task<Guid> CreateCustomer(
