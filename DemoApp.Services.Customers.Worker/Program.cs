@@ -1,5 +1,3 @@
-using SmingCode.Utilities.Kafka;
-using SmingCode.Utilities.Kafka.MinimalConsumers;
 using SmingCode.Utilities.ServiceMetadata;
 using SmingCode.Utilities.StartupProcesses;
 using DemoApp.Services.Customers.BusinessLogic;

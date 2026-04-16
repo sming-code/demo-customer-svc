@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace DemoApp.Services.Customers.BusinessLogic;
 using Dependencies;
+using SmingCode.Utilities.Kafka;
 
 public static class DependencyInjection
 {
@@ -11,7 +12,7 @@ public static class DependencyInjection
     )
     {
         services.AddScoped<ICustomerService, CustomerService>();
-
+        services.AddKafkaProducing(configuration);
         services.InitialiseDependencies(configuration);
 
         return services;

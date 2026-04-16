@@ -1,14 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
-    <ProjectReference Include="..\DemoApp.Services.Customers.Dependencies\DemoApp.Services.Customers.Dependencies.csproj" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
+    <ProjectReference Include="..\DemoApp.Services.Customers.Dependencies\DemoApp.Services.Customers.Dependencies.csproj" />
+  </ItemGroup>
 
 </Project>
