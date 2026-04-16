@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
     <ProjectReference Include="..\DemoApp.Services.Customers.Dependencies\DemoApp.Services.Customers.Dependencies.csproj" />
-    <ProjectReference Include="..\SmingCode.Utilities.Kafka\SmingCode.Utilities.Kafka.csproj" />
   </ItemGroup>
 
 </Project>

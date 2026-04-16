@@ -21,7 +21,8 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "Service_Name": "Customer Svc"
+                "Service_Name": "customer-svc",
+                "ConnectionStrings__CustomersDatabase": "Data Source=/home/matt/data/customer2.db"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
@@ -47,7 +48,8 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "Service_Name": "Customer Svc Worker"
+                "Service_Name": "customer-svc-worker",
+                "ConnectionStrings__CustomersDatabase": "Data Source=/home/matt/data/customer2.db"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"

@@ -1,4 +1,3 @@
-using SmingCode.Utilities.Kafka.Host;
 using SmingCode.Utilities.ServiceMetadata;
 using SmingCode.Utilities.StartupProcesses;
 using DemoApp.Services.Customers.BusinessLogic;
