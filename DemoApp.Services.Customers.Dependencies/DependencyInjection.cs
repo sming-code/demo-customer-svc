@@ -27,13 +27,12 @@ public static class DependencyInjection
             DataSource = Path.Join(
                 databaseDirectory,
                 $"{databaseName}.db"
-            ),
-            Cache = SqliteCacheMode.Shared
+            )
         }.ConnectionString;
 
         services.AddDbContext<CustomerContext>(options =>
         {
-            options.UseSqlite(connectionString);
+            options.UseSqlite($"{connectionString};PRAGMA journal_mode=WAL;");
         });
 
         services.AddScoped<IServiceInitializer, DatabaseInitialization>();

@@ -28,6 +28,7 @@ internal class CustomerData(
 
     public async Task<CustomerDto[]> GetAllCustomers()
         => await _customerContext.Customers
+            .AsNoTracking()
             .Select(entity => entity.ToDto())
             .ToArrayAsync();
 
@@ -37,6 +38,7 @@ internal class CustomerData(
     {
         var customerEntity = await _customerContext
             .Customers
+            .AsNoTracking()
             .FirstOrDefaultAsync(
                 entity => entity.CustomerId == customerIdentifier
             )
