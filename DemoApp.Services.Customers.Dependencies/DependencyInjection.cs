@@ -27,7 +27,8 @@ public static class DependencyInjection
             DataSource = Path.Join(
                 databaseDirectory,
                 $"{databaseName}.db"
-            )
+            ),
+            Cache = SqliteCacheMode.Shared
         }.ConnectionString;
 
         Console.WriteLine(connectionString);
