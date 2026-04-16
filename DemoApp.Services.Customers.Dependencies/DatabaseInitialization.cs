@@ -8,7 +8,7 @@ using Databases.Customers.Context;
 internal class DatabaseInitialization : IServiceInitializer
 {
     public Delegate ServiceInitializer =>
-        (
+        async (
             CustomerContext customerContext,
             ILogger<DatabaseInitialization> logger
         ) =>
@@ -20,7 +20,16 @@ internal class DatabaseInitialization : IServiceInitializer
                     customerContext.Database.GetConnectionString()
                 );
             }
+            
+            var pendingMigrations = await customerContext.Database.GetPendingMigrationsAsync();
 
-            customerContext.Database.Migrate();
+            if (pendingMigrations.Any())
+            {
+                customerContext.Database.Migrate();
+
+                await customerContext.Database.ExecuteSqlRawAsync(
+                    "PRAGMA journal_mode=WAL;"
+                );
+            }
         };
 }

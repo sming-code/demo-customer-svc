@@ -30,9 +30,11 @@ public static class DependencyInjection
             )
         }.ConnectionString;
 
+        Console.WriteLine(connectionString);
+
         services.AddDbContext<CustomerContext>(options =>
         {
-            options.UseSqlite($"{connectionString};PRAGMA journal_mode=WAL;");
+            options.UseSqlite(connectionString);
         });
 
         services.AddScoped<IServiceInitializer, DatabaseInitialization>();
