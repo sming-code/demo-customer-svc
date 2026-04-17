@@ -12,7 +12,6 @@ public static class DependencyInjection
     )
     {
         services.AddScoped<ICustomerService, CustomerService>();
-        services.AddKafkaProducing(configuration);
         services.InitialiseDependencies(configuration);
 
         return services;
