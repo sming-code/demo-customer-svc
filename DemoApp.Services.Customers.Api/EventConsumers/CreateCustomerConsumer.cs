@@ -1,7 +1,6 @@
 using System.Text.Json;
 
-namespace DemoApp.Services.Customers.Api;
-using Models;
+namespace DemoApp.Services.Customers.Api.EventConsumers;
 
 public class CreateCustomerConsumer : IMinimalConsumer
 {
@@ -33,5 +32,5 @@ public class CreateCustomerConsumer : IMinimalConsumer
 
                 return KafkaEventResult.Complete;
             }
-        );
+        ).CreateTopicIfNotExists();
 }
