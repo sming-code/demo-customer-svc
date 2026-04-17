@@ -9,7 +9,7 @@ services.InitializeServiceMetadata();
 
 services.InitialiseBusinessLogic(builder.Configuration);
 
-builder.LoadConsumers();
+services.LoadConsumers();
 
 Console.WriteLine($"{builder.Configuration["Kafka:BootstrapServers"]}");
 

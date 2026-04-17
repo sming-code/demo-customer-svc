@@ -1,12 +1,12 @@
 using System.Text.Json;
 
-namespace DemoApp.Services.Customers.Worker;
+namespace DemoApp.Services.Customers.Api;
 using Models;
 
 public class CreateCustomerConsumer : IMinimalConsumer
 {
-    public void Consume(KafkaApplicationBuilder builder) =>
-        builder.MapConsumer(
+    public void Consume(IServiceCollection services) =>
+        services.MapConsumer(
             "customer-create",
             async (
                 [FromEventValue] CustomerDto customerDto,

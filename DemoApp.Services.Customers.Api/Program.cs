@@ -13,13 +13,18 @@ var services = builder.Services;
 services.AddOpenApi();
 
 services.InitializeServiceMetadata();
-// builder.InitializeLogging();
+builder.InitializeLogging();
 
 services.InitialiseBusinessLogic(builder.Configuration);
+services.LoadConsumers();
+services.InitializeKafkaHandling(
+    builder.Configuration,
+    true
+);
 
-// services.AddProcessTracking(tracking =>
-//     tracking.AddApiMiddleware()
-// );
+services.AddProcessTracking(tracking =>
+    tracking.AddApiMiddleware()
+);
 
 var app = builder.Build();
 
@@ -31,7 +36,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// app.UseProcessTrackingMiddleware();
+app.UseProcessTrackingMiddleware();
 await app.RunUserDefinedStartupProcesses();
 
 app.Run();
