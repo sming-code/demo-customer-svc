@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseProcessTrackingMiddleware();
+// app.UseProcessTrackingMiddleware();
 await app.RunUserDefinedStartupProcesses();
 
 app.Run();
