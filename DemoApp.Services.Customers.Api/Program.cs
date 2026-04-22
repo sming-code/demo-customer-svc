@@ -1,9 +1,11 @@
 using DemoApp.Services.Customers.BusinessLogic;
 using SmingCode.Utilities.Logging.AspNetCore;
 using SmingCode.Utilities.ProcessTracking;
+using SmingCode.Utilities.ProcessTracking.Kafka;
 using SmingCode.Utilities.ProcessTracking.WebApi;
 using SmingCode.Utilities.ServiceMetadata;
 using SmingCode.Utilities.StartupProcesses;
+using SmingCode.Utilities.StartupProcesses.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -24,6 +26,7 @@ services.InitializeKafkaHandling(
 
 services.AddProcessTracking(tracking =>
     tracking.AddApiMiddleware()
+        .AddKafkaMiddleware()
 );
 
 var app = builder.Build();
@@ -36,7 +39,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseProcessTrackingMiddleware();
-await app.RunUserDefinedStartupProcesses();
+// app.UseProcessTrackingMiddleware();
+await app.RunUserDefinedStartupProcesses(
+    dependencyManager => dependencyManager.EnableAspNetCore()
+);
 
 app.Run();
