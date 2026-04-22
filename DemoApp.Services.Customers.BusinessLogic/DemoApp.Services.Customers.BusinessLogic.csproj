@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.15" />
+    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.17" />
   </ItemGroup>
 
   <ItemGroup>
