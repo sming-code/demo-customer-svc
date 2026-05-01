@@ -10,12 +10,9 @@ public class CreateCustomerEndpoint : IMinimalEndpoint
                 [FromBody] CreateCustomerModel newCustomer,
                 [FromServices] ICustomerService customerService,
                 HttpContext httpContext,
-                ILogger<CreateCustomerEndpoint> logger,
                 LinkGenerator linkGenerator
             ) =>
             {
-                logger.LogInformation("Loading customer information from FakeStorage");
-
                 var newCustomerIdentifier = await customerService.QueueCreateCustomer(
                     newCustomer.FirstName,
                     newCustomer.Surname

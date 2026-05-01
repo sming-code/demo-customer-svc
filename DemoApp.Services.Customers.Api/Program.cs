@@ -1,9 +1,10 @@
 using DemoApp.Services.Customers.BusinessLogic;
+using SmingCode.Utilities.Kafka.Config;
 using SmingCode.Utilities.Logging.AspNetCore;
 using SmingCode.Utilities.ProcessTracking;
-using SmingCode.Utilities.ProcessTracking.Kafka;
-using SmingCode.Utilities.ProcessTracking.WebApi;
-using SmingCode.Utilities.ServiceMetadata;
+using SmingCode.Utilities.ProcessTracking.Kafka.Config;
+using SmingCode.Utilities.ProcessTracking.WebApi.Config;
+using SmingCode.Utilities.ServiceMetadata.Config;
 using SmingCode.Utilities.StartupProcesses;
 using SmingCode.Utilities.StartupProcesses.AspNetCore;
 
