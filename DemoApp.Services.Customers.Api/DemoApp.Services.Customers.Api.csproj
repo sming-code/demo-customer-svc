@@ -8,17 +8,17 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
-    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.MinimalApi" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.Logging.AspNetCore" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking.WebApi" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking.Kafka" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.ServiceMetadata" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.ServiceMetadata.WebApplicationStartup" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.StartupProcesses" Version="1.0.25" />
-    <PackageReference Include="SmingCode.Utilities.StartupProcesses.AspNetCore" Version="1.0.25" />
+    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.MinimalApi" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.Logging.AspNetCore" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking.WebApi" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking.Kafka" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.ServiceMetadata" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.ServiceMetadata.WebApplicationStartup" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.StartupProcesses" Version="1.0.26" />
+    <PackageReference Include="SmingCode.Utilities.StartupProcesses.AspNetCore" Version="1.0.26" />
   </ItemGroup>
 
   <ItemGroup>
