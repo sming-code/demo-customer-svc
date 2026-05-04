@@ -20,16 +20,12 @@ internal class DatabaseInitialization : IServiceInitializer
                     customerContext.Database.GetConnectionString()
                 );
             }
-            
+
             var pendingMigrations = await customerContext.Database.GetPendingMigrationsAsync();
 
             if (pendingMigrations.Any())
             {
                 customerContext.Database.Migrate();
-
-                // await customerContext.Database.ExecuteSqlRawAsync(
-                //     "PRAGMA journal_mode=DELETE;"
-                // );
             }
         };
 }

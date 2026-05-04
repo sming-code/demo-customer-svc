@@ -15,9 +15,9 @@ namespace DemoApp.Services.Customers.Dependencies.Migrations
                 name: "Customer",
                 columns: table => new
                 {
-                    CustomerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Surname = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,14 +28,14 @@ namespace DemoApp.Services.Customers.Dependencies.Migrations
                 name: "CustomerAddress",
                 columns: table => new
                 {
-                    CustomerAddressId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AddressLine1 = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    AddressLine2 = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    TownCity = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    County = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    PostCode = table.Column<string>(type: "TEXT", maxLength: 15, nullable: false),
-                    Country = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                    CustomerAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AddressLine1 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AddressLine2 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    TownCity = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    County = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PostCode = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {

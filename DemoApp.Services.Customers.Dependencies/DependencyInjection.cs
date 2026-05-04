@@ -5,7 +5,6 @@ using SmingCode.Utilities.StartupProcesses;
 namespace DemoApp.Services.Customers.Dependencies;
 using Databases.Customers;
 using Databases.Customers.Context;
-using Microsoft.Data.Sqlite;
 
 public static class DependencyInjection
 {
@@ -16,26 +15,16 @@ public static class DependencyInjection
     {
         services.AddScoped<ICustomerData, CustomerData>();
 
-        var databaseDirectory = configuration["Database:Directory"];
-        var databaseName = configuration["Database:Name"]
+        var connectionString = configuration["Database:ConnectionString"]
             ?? throw new InvalidOperationException(
-                "Attempt to connect to service database requires configuration entry Database:Name"
+                "Attempt to connect to service database requires configuration entry Database:ConnectionString"
             );
-
-        var connectionString = new SqliteConnectionStringBuilder
-        {
-            DataSource = Path.Join(
-                databaseDirectory,
-                $"{databaseName}.db"
-            ),
-            Cache = SqliteCacheMode.Shared
-        }.ConnectionString;
 
         Console.WriteLine(connectionString);
 
         services.AddDbContext<CustomerContext>(options =>
         {
-            options.UseSqlite(connectionString);
+            options.UseSqlServer(connectionString);
         });
 
         services.AddScoped<IServiceInitializer, DatabaseInitialization>();

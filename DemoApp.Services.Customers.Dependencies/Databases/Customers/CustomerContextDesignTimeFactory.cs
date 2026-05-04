@@ -9,7 +9,7 @@ public class CustomerContextFactory : IDesignTimeDbContextFactory<CustomerContex
     public CustomerContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<CustomerContext>()
-            .UseSqlite("Data Source=/home/matt/data/customer.db");
+            .UseSqlServer("Data Source=/home/matt/data/customer.db");
 
         return new CustomerContext(optionsBuilder.Options);
     }
