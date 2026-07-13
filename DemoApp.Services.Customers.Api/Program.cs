@@ -1,3 +1,4 @@
+using Azure.Identity;
 using DemoApp.Services.Customers.BusinessLogic;
 using SmingCode.Utilities.Logging.AspNetCore;
 using SmingCode.Utilities.ProcessTracking.Config;
@@ -7,6 +8,7 @@ using SmingCode.Utilities.ServiceMetadata.Config;
 using SmingCode.Utilities.ServiceMetadata.WebApplicationStartup;
 using SmingCode.Utilities.StartupProcesses;
 using SmingCode.Utilities.StartupProcesses.AspNetCore;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -15,6 +17,17 @@ var services = builder.Services;
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 services.AddOpenApi();
 
+var appConfigurationEndpoint = builder.Configuration.GetValue<string>("App_Config_Endpoint")!;
+var appConfigurationLabel = builder.Configuration.GetValue<string>("Tag_Environment")!;
+builder.Configuration.AddAzureAppConfiguration(azureAppConfigurationOptions =>
+    azureAppConfigurationOptions
+        .Connect(
+            new Uri(appConfigurationEndpoint),
+            new DefaultAzureCredential()
+        )
+        .Select(KeyFilter.Any, LabelFilter.Null)
+        .Select(KeyFilter.Any, appConfigurationLabel)
+);
 services.InitializeServiceMetadata();
 builder.InitializeLogging();
 

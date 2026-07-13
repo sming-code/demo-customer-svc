@@ -7,18 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
-    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.MinimalApi" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.Logging.AspNetCore" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking.WebApi" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking.Kafka" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.ServiceMetadata" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.ServiceMetadata.WebApplicationStartup" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.StartupProcesses" Version="1.0.33" />
-    <PackageReference Include="SmingCode.Utilities.StartupProcesses.AspNetCore" Version="1.0.33" />
+    <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="8.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="8.5.0" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.10.0" />
+    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.MinimalApi" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.Logging.AspNetCore" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking.WebApi" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking.Kafka" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.ServiceMetadata" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.ServiceMetadata.WebApplicationStartup" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.StartupProcesses" Version="1.0.34" />
+    <PackageReference Include="SmingCode.Utilities.StartupProcesses.AspNetCore" Version="1.0.34" />
   </ItemGroup>
 
   <ItemGroup>
