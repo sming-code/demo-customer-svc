@@ -57,7 +57,7 @@ permissions:
 
 jobs:
   deploy-to-environments:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-m
     strategy:
       fail-fast: true
       matrix:
