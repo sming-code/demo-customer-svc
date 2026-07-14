@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
-    <ProjectReference Include="..\DemoApp.Services.Customers.Dependencies\DemoApp.Services.Customers.Dependencies.csproj" />
+    <PackageReference Include="Confluent.Kafka" Version="2.14.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SmingCode.Utilities.Kafka\SmingCode.Utilities.Kafka.csproj" />
   </ItemGroup>
 

@@ -19,6 +19,7 @@ services.AddOpenApi();
 
 var appConfigurationEndpoint = builder.Configuration.GetValue<string>("App_Config_Endpoint")!;
 var appConfigurationLabel = builder.Configuration.GetValue<string>("Tag_Environment")!;
+Console.WriteLine(appConfigurationLabel);
 builder.Configuration.AddAzureAppConfiguration(azureAppConfigurationOptions =>
     azureAppConfigurationOptions
         .Connect(

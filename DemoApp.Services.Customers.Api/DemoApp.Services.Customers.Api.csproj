@@ -12,22 +12,22 @@
     <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="8.5.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="8.5.0" />
     <PackageReference Include="Microsoft.OpenApi" Version="2.10.0" />
-    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.MinimalApi" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.Logging.AspNetCore" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking.WebApi" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.ProcessTracking.Kafka" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.ServiceMetadata" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.ServiceMetadata.WebApplicationStartup" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.StartupProcesses" Version="1.0.34" />
-    <PackageReference Include="SmingCode.Utilities.StartupProcesses.AspNetCore" Version="1.0.34" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
     <ProjectReference Include="..\DemoApp.Services.Customers.BusinessLogic\DemoApp.Services.Customers.BusinessLogic.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.Kafka\SmingCode.Utilities.Kafka.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.Kafka.MinimalConsumers\SmingCode.Utilities.Kafka.MinimalConsumers.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.MinimalApi\SmingCode.Utilities.MinimalApi.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.Logging.AspNetCore\SmingCode.Utilities.Logging.AspNetCore.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.ProcessTracking\SmingCode.Utilities.ProcessTracking.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.ProcessTracking.WebApi\SmingCode.Utilities.ProcessTracking.WebApi.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.ProcessTracking.Kafka\SmingCode.Utilities.ProcessTracking.Kafka.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.ServiceMetadata\SmingCode.Utilities.ServiceMetadata.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.ServiceMetadata.WebApplicationStartup\SmingCode.Utilities.ServiceMetadata.WebApplicationStartup.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.StartupProcesses\SmingCode.Utilities.StartupProcesses.csproj" />
+    <ProjectReference Include="..\SmingCode.Utilities.StartupProcesses.AspNetCore\SmingCode.Utilities.StartupProcesses.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>
