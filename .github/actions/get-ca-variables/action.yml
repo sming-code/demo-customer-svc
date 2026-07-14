@@ -57,6 +57,7 @@ runs:
       containerAppEnvironmentName="caenv-${{ inputs.environment }}-tag-${{ inputs.logical-area }}"
       serviceType=${{ inputs.service-type }}
       containerAppImage="${{ inputs.app-name }}-${serviceType,,}"
+      echo "$containerAppImage"
       containerAppName="ca-${{ inputs.app-name }}-${{ inputs.environment }}$branchSuffix"
       appInsightsName="insight-$containerAppName"
       resourceGroupName="$([[ $branchSuffix == '' ]] && echo rg-$containerAppName || echo rg-${{ inputs.environment }}$branchSuffix)"
