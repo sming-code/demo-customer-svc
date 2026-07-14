@@ -2,6 +2,8 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
 namespace SmingCode.Utilities.Kafka.Config;
+
+using System.Net.Security;
 using Consumers;
 using Producers;
 using SmingCode.Utilities.StartupProcesses;
@@ -43,11 +45,19 @@ public static class Injection
         bool includeConsumers = false
     )
     {
-        var kafkaConfig = configuration.GetSection("Kafka");
-        Console.WriteLine(kafkaConfig.ToString());
-        var kafkaOptions = configuration.GetRequiredSection("Kafka")
-            .Get<KafkaOptions>()
-            ?? throw new InvalidOperationException("No valid kafka configuration section found.");
+        var bootstrapServers = configuration.GetValue<string>("Kafka:BootstrapServers");
+        var securityProtocol = configuration.GetValue<string>("Kafka:SecurityProtocol");
+        // var kafkaOptions = configuration.GetRequiredSection("Kafka")
+        //     .Get<KafkaOptions>()
+        //     ?? throw new InvalidOperationException("No valid kafka configuration section found.");
+        var kafkaOptions = new KafkaOptions
+        {
+            Server = new KafkaServerOptions
+            {
+                BootstrapServers = bootstrapServers,
+                SecurityProtocol = securityProtocol
+            }
+        };
         services.AddSingleton(kafkaOptions);
         services.AddSingleton<IAdminClientProvider, AdminClientProvider>();
         services.AddSingleton<ITopicManager, TopicManager>();
