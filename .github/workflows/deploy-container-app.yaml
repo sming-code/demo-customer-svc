@@ -1,0 +1,110 @@
+name: Deploy container app to environments
+
+on:
+  workflow_call:
+    inputs:
+      logical-area:
+        description: The logical area to deploy to
+        required: true
+        type: string
+      app-name:
+        description: The name of the app
+        required: true
+        type: string
+      service-name:
+        description: The service name to use for logging
+        required: true
+        type: string
+      version-no:
+        description: The version number of the container image
+        required: true
+        type: string
+      environments:
+        description: The environments to deploy to
+        required: true
+        type: string
+      service-types:
+        description: The service types to deploy
+        required: true
+        type: string
+    secrets:
+      ghcr-username:
+        required: true
+      ghcr-token:
+        required: true
+      client-id-dev:
+        required: true
+      client-id-test:
+        required: true
+      client-id-prod:
+        required: true
+      tenant-id-dev:
+        required: true
+      tenant-id-test:
+        required: true
+      tenant-id-prod:
+        required: true
+      subscription-id-dev:
+        required: true
+      subscription-id-test:
+        required: true
+      subscription-id-prod:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-to-environments:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        environment: ${{ fromJson(inputs.environments) }}
+        service-type: ${{ fromJson(inputs.service-types) }}
+      max-parallel: 1
+    environment: ${{ matrix.environment }}
+    steps:
+    - uses: actions/checkout@v6
+
+    - uses: azure/login@v3
+      with:
+        client-id: ${{ case(matrix.environment == 'dev', secrets.client-id-dev, case(matrix.environment == 'test', secrets.client-id-test, case(matrix.environment == 'prod', secrets.client-id-prod, 'unknown'))) }}
+        tenant-id: ${{ case(matrix.environment == 'dev', secrets.tenant-id-dev, case(matrix.environment == 'test', secrets.tenant-id-test, case(matrix.environment == 'prod', secrets.tenant-id-prod, 'unknown'))) }}
+        subscription-id: ${{ case(matrix.environment == 'dev', secrets.subscription-id-dev, case(matrix.environment == 'test', secrets.subscription-id-test, case(matrix.environment == 'prod', secrets.subscription-id-prod, 'unknown'))) }}
+
+    - name: Generate container app variables
+      id: ca-variables
+      uses: ./.github/actions/get-ca-variables
+      with:
+        environment: ${{ matrix.environment }}
+        app-name: ${{ inputs.app-name }}
+        logical-area: ${{ inputs.logical-area }}
+        service-type: ${{ matrix.service-type }}
+
+    - uses: ./.github/actions/deploy-container-app
+      env:
+        app-insights-exists: ${{ steps.ca-variables.outputs.app-insights-exists }}
+        app-insights-name: ${{ steps.ca-variables.outputs.app-insights-name }}
+        app-name: ${{ inputs.app-name }}
+        container-app-environment-name: ${{ steps.ca-variables.outputs.container-app-environment-name }}
+        container-app-exists: ${{ steps.ca-variables.outputs.container-app-exists }}
+        container-app-image: ${{ steps.ca-variables.outcome.container-app-image }}
+        container-app-name: ${{ steps.ca-variables.outputs.container-app-name }}
+        environment-name: ${{ matrix.environment }}
+        environment-resource-group-name: ${{ steps.ca-variables.outputs.environment-resource-group-name }}
+        ghcr-token: ${{ secrets.ghcr-token }}
+        ghcr-username: ${{ secrets.ghcr-username }}
+        logical-area: ${{ inputs.logical-area }}
+        log-analytics-workspace-name: ${{ steps.ca-variables.outputs.log-analytics-workspace-name }}
+        resource-group-exists: ${{ steps.ca-variables.outputs.resource-group-exists }}
+        resource-group-name: ${{ steps.ca-variables.outputs.resource-group-name }}
+        revision-suffix: ${{ inputs.version-no }}
+        service-name: ${{ inputs.service-name }}
+        sql-database-exists: ${{ steps.ca-variables.outputs.sql-database-exists }}
+        sql-database-name: ${{ steps.ca-variables.outputs.sql-database-name }}
+        sql-server-name: ${{ steps.ca-variables.outputs.sql-server-name }}
+        subscription: ${{ case(matrix.environment == 'dev', 'sub-tag-testing', case(matrix.environment == 'test', 'sub-tag-testing', case(matrix.environment == 'prod', 'sub-tag-testing', 'unknown'))) }}
+        subscription-id: ${{ case(matrix.environment == 'dev', secrets.subscription-id-dev, case(matrix.environment == 'test', secrets.subscription-id-test, case(matrix.environment == 'prod', secrets.subscription-id-prod, 'unknown'))) }}
+        version-no: ${{ inputs.version-no }}

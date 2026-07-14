@@ -6,10 +6,16 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      deploy-to-dev:
+        description: 'Deploy branch container to dev environment for testing'
+        required: false
+        type: boolean
+        default: false
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+
 jobs:
   variables:
     name: Generate variables
@@ -24,9 +30,14 @@ jobs:
       run: echo "Variables loaded..."
     outputs:
       project-name-root: DemoApp.Services.Customers
-      image-name-root: demo-customer-svc
+      app-name: customer
       version-no: ${{ steps.get-version.outputs.version-no }}
       last-release-tag: ${{ steps.get-version.outputs.last-release-tag }}
+      logical-area: private
+      service-name: "Customer Service"
+      branch-deploy-environments: '["dev"]'
+      environments: '["dev","test","prod"]'
+      service-types: '["Api"]'
 
   build-test:
     name: Build Test
@@ -37,25 +48,48 @@ jobs:
   build-docker-images:
     name: Build docker images
     runs-on: ubuntu-latest
+    needs: [ variables, build-test ]
     strategy:
       fail-fast: true
       matrix:
-        service-type:
-          - Api
-          # - Worker
-    needs: [ variables, build-test ]
+        service-type: ${{ fromJson(needs.variables.outputs.service-types) }}
     steps:
     - uses: sming-code/build-docker-image-action@v1
       with:
         project-name-root: ${{ needs.variables.outputs.project-name-root }}
-        image-name-root: ${{ needs.variables.outputs.image-name-root }}
+        image-name-root: ${{ needs.variables.outputs.app-name }}
         dockerfile-name-root: Dockerfile
         service-type: ${{ matrix.service-type }}
         version-number: ${{ needs.variables.outputs.version-no }}
 
+  deployments:
+    name: Deploy container app and related resources to environments
+    needs: [ variables ]
+    if: ${{ (github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
+    uses: ./.github/workflows/deploy-container-app.yaml
+    with:
+      logical-area: ${{ needs.variables.outputs.logical-area }}
+      app-name: ${{ needs.variables.outputs.app-name }}
+      service-name: ${{ needs.variables.outputs.service-name }}
+      version-no: ${{ needs.variables.outputs.version-no }}
+      environments: ${{ case(github.ref == 'refs/heads/main', needs.variables.outputs.environments, needs.variables.outputs.branch-deploy-environments) }}
+      service-types: ${{ needs.variables.outputs.service-types }}
+    secrets:
+      ghcr-username: ${{ secrets.GHCR_USERNAME }}
+      ghcr-token: ${{ secrets.GHCR_TOKEN }}
+      client-id-dev: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+      client-id-test: ${{ secrets.AZURE_CLIENT_ID_TEST }}
+      client-id-prod: ${{ secrets.AZURE_CLIENT_ID_PROD }}
+      tenant-id-dev: ${{ secrets.AZURE_TENANT_ID_DEV }}
+      tenant-id-test: ${{ secrets.AZURE_TENANT_ID_TEST }}
+      tenant-id-prod: ${{ secrets.AZURE_TENANT_ID_PROD }}
+      subscription-id-dev: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+      subscription-id-test: ${{ secrets.AZURE_SUBSCRIPTION_ID_TEST }}
+      subscription-id-prod: ${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}
+
   create-release:
     name: Create release
-    needs: [ variables, build-docker-images ]
+    needs: [ variables, build-docker-images, deployments ]
     if: ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/add-github-release.yaml
     with:
