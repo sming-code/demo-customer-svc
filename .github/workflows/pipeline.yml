@@ -64,7 +64,7 @@ jobs:
 
   deployments:
     name: Deploy container app and related resources to environments
-    needs: [ variables ]
+    needs: [ variables, build-docker-images ]
     if: ${{ (github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
     uses: ./.github/workflows/deploy-container-app.yaml
     with:
