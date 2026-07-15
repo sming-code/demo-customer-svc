@@ -74,6 +74,8 @@ jobs:
       version-no: ${{ needs.variables.outputs.version-no }}
       environments: ${{ case(github.ref == 'refs/heads/main', needs.variables.outputs.environments, needs.variables.outputs.branch-deploy-environments) }}
       service-types: ${{ needs.variables.outputs.service-types }}
+      head-ref: ${{ github.head_ref }}
+      ref: ${{ github.ref }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
