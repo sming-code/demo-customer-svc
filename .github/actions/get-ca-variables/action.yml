@@ -1,5 +1,6 @@
 name: Get container app variables
 description: 'Get the variables needed to deploy the container app'
+
 inputs:
   app-name:
     description: The name of the app being deployed

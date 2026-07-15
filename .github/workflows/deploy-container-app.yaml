@@ -66,8 +66,6 @@ jobs:
       max-parallel: 1
     environment: ${{ matrix.environment }}
     steps:
-    - uses: actions/checkout@v6
-
     - uses: azure/login@v3
       with:
         client-id: ${{ case(matrix.environment == 'dev', secrets.client-id-dev, case(matrix.environment == 'test', secrets.client-id-test, case(matrix.environment == 'prod', secrets.client-id-prod, 'unknown'))) }}
@@ -76,7 +74,7 @@ jobs:
 
     - name: Generate container app variables
       id: ca-variables
-      uses: ./.github/actions/get-ca-variables
+      uses: sming-code/get-container-app-variables-action@v1
       with:
         environment: ${{ matrix.environment }}
         app-name: ${{ inputs.app-name }}
