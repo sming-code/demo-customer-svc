@@ -38,6 +38,16 @@ jobs:
       branch-deploy-environments: '["dev"]'
       environments: '["dev","test","prod"]'
       service-types: '["Api"]'
+  branch-details:
+    name: Get details about branch to determine resource naming.
+    outputs:
+      branch-name: ${{ steps.process.outputs.branch-name }}
+    runs-on: ubuntu-latest
+    steps:
+    - id: process
+      run: |
+        branchName="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+        echo "branch-name=$branchName" >> $GITHUB_OUTPUT      
 
   build-test:
     name: Build Test
@@ -64,7 +74,7 @@ jobs:
 
   deployments:
     name: Deploy container app and related resources to environments
-    needs: [ variables, build-docker-images ]
+    needs: [ variables, build-docker-images, branch-details ]
     if: ${{ (github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
     uses: sming-code/container-app-environments-deploy-action/.github/workflows/container-app-environments-deploy-action.yml@v1
     with:
@@ -74,8 +84,7 @@ jobs:
       version-no: ${{ needs.variables.outputs.version-no }}
       environments: ${{ case(github.ref == 'refs/heads/main', needs.variables.outputs.environments, needs.variables.outputs.branch-deploy-environments) }}
       service-types: ${{ needs.variables.outputs.service-types }}
-      head-ref: ${{ github.head_ref }}
-      ref: ${{ github.ref }}
+      branch-name: ${{ needs.branch-details.outputs.branch-name }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
