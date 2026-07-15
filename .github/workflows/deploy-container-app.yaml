@@ -83,14 +83,14 @@ jobs:
         logical-area: ${{ inputs.logical-area }}
         service-type: ${{ matrix.service-type }}
 
-    - uses: ./.github/actions/deploy-container-app
+    - uses: sming-code/deploy-container-app-action@v1
       env:
         app-insights-exists: ${{ steps.ca-variables.outputs.app-insights-exists }}
         app-insights-name: ${{ steps.ca-variables.outputs.app-insights-name }}
         app-name: ${{ inputs.app-name }}
         container-app-environment-name: ${{ steps.ca-variables.outputs.container-app-environment-name }}
         container-app-exists: ${{ steps.ca-variables.outputs.container-app-exists }}
-        container-app-image: ${{ steps.ca-variables.outcome.container-app-image }}
+        container-app-image: ${{ steps.ca-variables.outputs.container-app-image }}
         container-app-name: ${{ steps.ca-variables.outputs.container-app-name }}
         environment-name: ${{ matrix.environment }}
         environment-resource-group-name: ${{ steps.ca-variables.outputs.environment-resource-group-name }}
