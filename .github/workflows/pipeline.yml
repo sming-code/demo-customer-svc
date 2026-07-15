@@ -66,7 +66,7 @@ jobs:
     name: Deploy container app and related resources to environments
     needs: [ variables, build-docker-images ]
     if: ${{ (github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
-    uses: ./.github/workflows/deploy-container-app.yaml
+    uses: sming-code/container-app-environments-deploy-action/.github/workflows/container-app-environments-deploy-action.yml@v1
     with:
       logical-area: ${{ needs.variables.outputs.logical-area }}
       app-name: ${{ needs.variables.outputs.app-name }}
