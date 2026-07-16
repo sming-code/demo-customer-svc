@@ -35,19 +35,8 @@ jobs:
       last-release-tag: ${{ steps.get-version.outputs.last-release-tag }}
       logical-area: private
       service-name: "Customer Service"
-      branch-deploy-environments: '["dev"]'
-      environments: '["dev","test","prod"]'
       service-types: '["Api"]'
-  branch-details:
-    name: Get details about branch to determine resource naming.
-    outputs:
-      branch-name: ${{ steps.process.outputs.branch-name }}
-    runs-on: ubuntu-latest
-    steps:
-    - id: process
-      run: |
-        branchName="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
-        echo "branch-name=$branchName" >> $GITHUB_OUTPUT      
+      branch-name: ${{ case(github.head_ref == '', github.ref_name, github.head_ref) }}
 
   build-test:
     name: Build Test
@@ -72,35 +61,72 @@ jobs:
         service-type: ${{ matrix.service-type }}
         version-number: ${{ needs.variables.outputs.version-no }}
 
-  deployments:
+  deploy-dev:
     name: Deploy container app and related resources to environments
-    needs: [ variables, build-docker-images, branch-details ]
+    needs: [ variables, build-docker-images ]
     if: ${{ (github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
-    uses: sming-code/container-app-environments-deploy-action/.github/workflows/container-app-environments-deploy-action.yml@v1
+    uses: sming-code/deploy-container-app-to-environment-action/.github/workflows/deploy-container-app-to-environment-action.yml@v1
     with:
+      environment: dev
       logical-area: ${{ needs.variables.outputs.logical-area }}
       app-name: ${{ needs.variables.outputs.app-name }}
       service-name: ${{ needs.variables.outputs.service-name }}
       version-no: ${{ needs.variables.outputs.version-no }}
-      environments: ${{ case(github.ref == 'refs/heads/main', needs.variables.outputs.environments, needs.variables.outputs.branch-deploy-environments) }}
       service-types: ${{ needs.variables.outputs.service-types }}
-      branch-name: ${{ needs.branch-details.outputs.branch-name }}
+      branch-name: ${{ needs.variables.outputs.branch-name }}
+      subscription: 'sub-tag-testing'
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
-      client-id-dev: ${{ secrets.AZURE_CLIENT_ID_DEV }}
-      client-id-test: ${{ secrets.AZURE_CLIENT_ID_TEST }}
-      client-id-prod: ${{ secrets.AZURE_CLIENT_ID_PROD }}
-      tenant-id-dev: ${{ secrets.AZURE_TENANT_ID_DEV }}
-      tenant-id-test: ${{ secrets.AZURE_TENANT_ID_TEST }}
-      tenant-id-prod: ${{ secrets.AZURE_TENANT_ID_PROD }}
-      subscription-id-dev: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
-      subscription-id-test: ${{ secrets.AZURE_SUBSCRIPTION_ID_TEST }}
-      subscription-id-prod: ${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}
+      client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+      tenant-id: ${{ secrets.AZURE_TENANT_ID_DEV }}
+      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+
+  deploy-test:
+    name: Deploy container app and related resources to environments
+    needs: [ variables, deploy-dev ]
+    if: ${{ (github.ref == 'refs/heads/main') }}
+    uses: sming-code/deploy-container-app-to-environment-action/.github/workflows/deploy-container-app-to-environment-action.yml@v1
+    with:
+      environment: test
+      logical-area: ${{ needs.variables.outputs.logical-area }}
+      app-name: ${{ needs.variables.outputs.app-name }}
+      service-name: ${{ needs.variables.outputs.service-name }}
+      version-no: ${{ needs.variables.outputs.version-no }}
+      service-types: ${{ needs.variables.outputs.service-types }}
+      branch-name: ${{ needs.variables.outputs.branch-name }}
+      subscription: 'sub-tag-testing'
+    secrets:
+      ghcr-username: ${{ secrets.GHCR_USERNAME }}
+      ghcr-token: ${{ secrets.GHCR_TOKEN }}
+      client-id: ${{ secrets.AZURE_CLIENT_ID_TEST }}
+      tenant-id: ${{ secrets.AZURE_TENANT_ID_TEST }}
+      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_TEST }}
+
+  deploy-prod:
+    name: Deploy container app and related resources to environments
+    needs: [ variables, deploy-test ]
+    if: ${{ (github.ref == 'refs/heads/main') }}
+    uses: sming-code/deploy-container-app-to-environment-action/.github/workflows/deploy-container-app-to-environment-action.yml@v1
+    with:
+      environment: prod
+      logical-area: ${{ needs.variables.outputs.logical-area }}
+      app-name: ${{ needs.variables.outputs.app-name }}
+      service-name: ${{ needs.variables.outputs.service-name }}
+      version-no: ${{ needs.variables.outputs.version-no }}
+      service-types: ${{ needs.variables.outputs.service-types }}
+      branch-name: ${{ needs.variables.outputs.branch-name }}
+      subscription: 'sub-tag-testing'
+    secrets:
+      ghcr-username: ${{ secrets.GHCR_USERNAME }}
+      ghcr-token: ${{ secrets.GHCR_TOKEN }}
+      client-id: ${{ secrets.AZURE_CLIENT_ID_PROD }}
+      tenant-id: ${{ secrets.AZURE_TENANT_ID_PROD }}
+      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}
 
   create-release:
     name: Create release
-    needs: [ variables, build-docker-images, deployments ]
+    needs: [ variables, deploy-prod ]
     if: ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/add-github-release.yaml
     with:
