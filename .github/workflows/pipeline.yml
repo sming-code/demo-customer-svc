@@ -35,7 +35,7 @@ jobs:
       last-release-tag: ${{ steps.get-version.outputs.last-release-tag }}
       logical-area: private
       service-name: "Customer Service"
-      service-types: '["Api"]'
+      service-types: '["Api","Worker"]'
       branch-name: ${{ case(github.head_ref == '', github.ref_name, github.head_ref) }}
 
   build-test:

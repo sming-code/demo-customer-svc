@@ -1,6 +1,7 @@
 using System.Text.Json;
 
-namespace DemoApp.Services.Customers.Api.EventConsumers;
+namespace DemoApp.Services.Customers.Worker.EventConsumers;
+using Events;
 
 public class CreateCustomerConsumer : IMinimalConsumer
 {
@@ -8,7 +9,7 @@ public class CreateCustomerConsumer : IMinimalConsumer
         services.MapConsumer(
             "customer-create",
             async (
-                [FromEventValue] CustomerDto customerDto,
+                [FromEventValue] CustomerEvent customerEvent,
                 ICustomerService customerService,
                 ILogger<CreateCustomerConsumer> logger
             ) =>
@@ -17,18 +18,23 @@ public class CreateCustomerConsumer : IMinimalConsumer
                 {
                     logger.LogInformation(
                         "Received message on customer-create topic, with value '{EventValue}'",
-                        JsonSerializer.Serialize(customerDto)
+                        JsonSerializer.Serialize(customerEvent)
                     );                    
                 }
 
                 await customerService.CreateCustomer(
-                    customerDto
+                    customerEvent.CustomerIdentifier,
+                    customerEvent.FirstName,
+                    customerEvent.Surname
                 );
 
-                logger.LogInformation(
-                    "Customer created with id {Customer Id}",
-                    customerDto.CustomerIdentifier
-                );
+                if (logger.IsEnabled(LogLevel.Information))
+                {
+                    logger.LogInformation(
+                        "Customer created with id {Customer Id}",
+                        customerEvent.CustomerIdentifier
+                    );
+                }
 
                 return KafkaEventResult.Complete;
             }

@@ -4,7 +4,9 @@ using Dtos;
 public interface ICustomerData
 {
     Task<Guid> CreateCustomer(
-        CustomerDto customerDto
+        Guid customerIdentifier,
+        string firstName,
+        string surname
     );
     Task<CustomerDto[]> GetAllCustomers();
     Task<CustomerDto> GetCustomerByIdentifier(

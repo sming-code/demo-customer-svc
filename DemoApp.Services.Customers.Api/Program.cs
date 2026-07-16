@@ -25,8 +25,7 @@ builder.InitializeLogging();
 services.InitialiseBusinessLogic(configuration);
 services.LoadConsumers();
 services.InitializeKafkaHandling(
-    configuration,
-    true
+    configuration
 );
 
 services.AddProcessTracking(tracking =>

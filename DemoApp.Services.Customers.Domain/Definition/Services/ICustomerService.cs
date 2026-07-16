@@ -7,7 +7,11 @@ public interface ICustomerService
         string firstName,
         string surname
     );
-    Task CreateCustomer(CustomerDto customerDto);
+    Task CreateCustomer(
+        Guid customerIdentifier,
+        string firstName,
+        string surname
+    );
     Task<CustomerDto[]> GetAllCustomers();
     Task<CustomerDto> GetCustomerByIdentifier(
         Guid customerIdentifier
