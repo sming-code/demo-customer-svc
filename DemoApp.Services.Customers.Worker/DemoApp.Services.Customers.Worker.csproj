@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-DemoApp.Services.Customers.Worker-77b50d74-692f-4c21-9216-1147ed6c71bc</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.8.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
+    <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.35" />
+    <PackageReference Include="SmingCode.Utilities.Kafka.Host" Version="1.0.35" />
+    <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.35" />
+    <PackageReference Include="SmingCode.Utilities.Logging.Worker" Version="1.0.35" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking" Version="1.0.35" />
+    <PackageReference Include="SmingCode.Utilities.ProcessTracking.Kafka" Version="1.0.35" />
+    <PackageReference Include="SmingCode.Utilities.ServiceMetadata" Version="1.0.35" />
+    <PackageReference Include="SmingCode.Utilities.StartupProcesses" Version="1.0.35" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DemoApp.Services.Customers.BusinessLogic\DemoApp.Services.Customers.BusinessLogic.csproj" />
+    <ProjectReference Include="..\DemoApp.Services.Customers.Domain\DemoApp.Services.Customers.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Demo</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>

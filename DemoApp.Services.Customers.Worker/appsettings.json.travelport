@@ -1,0 +1,20 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Trace",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "Kafka": {
+    "Server": {
+      "BootstrapServers": "hospitality-streaming2.dv.travelport.com:6678",
+      "SecurityProtocol": "Ssl"
+    }
+  },
+  "Apis": {
+    "ReservationService": {
+      "BaseAddress": "http://localhost:5245/"
+    }
+  },
+  "Service_Name": "Taa Demo"
+}

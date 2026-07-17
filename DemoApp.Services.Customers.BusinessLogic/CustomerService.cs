@@ -28,9 +28,13 @@ internal class CustomerService(
     }
 
     public async Task CreateCustomer(
-        CustomerDto customerDto
+        Guid customerIdentifier,
+        string firstName,
+        string surname
     ) => await _customerData.CreateCustomer(
-        customerDto
+        customerIdentifier,
+        firstName,
+        surname
     );
 
     public async Task<CustomerDto[]> GetAllCustomers()
