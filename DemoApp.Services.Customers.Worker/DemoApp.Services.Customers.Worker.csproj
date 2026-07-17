@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.8.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
+    <PackageReference Include="SmingCode.Utilities.AppConfiguration" Version="1.0.35" />
     <PackageReference Include="SmingCode.Utilities.Kafka" Version="1.0.35" />
     <PackageReference Include="SmingCode.Utilities.Kafka.Host" Version="1.0.35" />
     <PackageReference Include="SmingCode.Utilities.Kafka.MinimalConsumers" Version="1.0.35" />
