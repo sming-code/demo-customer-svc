@@ -55,6 +55,20 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  app-name: ${{ inputs.app-name }}
+  app-insights-name: ${{ inputs.app-insights-name }}
+  branch-suffix: ${{ inputs.branch-suffix }}
+  container-app-environment-name: ${{ inputs.container-app-environment-name }}
+  environment-name: ${{ inputs.environment-name }}
+  environment-resource-group-name: ${{ inputs.environment-resource-group-name }}
+  log-analytics-workspace-name: ${{ inputs.log-analytics-workspace-name }}
+  resource-group-name: ${{ inputs.resource-group-name }}
+  sql-database-name: ${{ inputs.sql-database-name }}
+  sql-server-name: ${{ inputs.sql-server-name }}
+  subscription: ${{ inputs.subscription }}
+  version-no: ${{ inputs.version-no }}
+
 jobs:
   deploy-to-environment:
     environment: ${{ inputs.environment-name }}
