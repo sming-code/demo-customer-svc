@@ -46,7 +46,6 @@ jobs:
     outputs:
       version-no: ${{ steps.get-version.outputs.version-no }}
       last-release-tag: ${{ steps.get-version.outputs.last-release-tag }}
-      branch-name: ${{ case(github.head_ref == '', github.ref_name, github.head_ref) }}
 
   build-test:
     name: Build Test
