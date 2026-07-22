@@ -30,6 +30,8 @@ on:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  log-level: ${{ inputs.log-level }}
+  reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
 
 jobs:
   variables:
@@ -94,8 +96,8 @@ jobs:
       environment-name: dev
       environment-resource-group-name: rg-dev-tag
       log-analytics-workspace-name: log-analytics-dev-tag
-      resource-group-name: ${{ case(needs.get-branch-suffix.outputs.branch-suffix == '', 'rg-customer-dev', format('rg-dev-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
-      sql-database-name:  sql-customer-dev-${{ needs.get-branch-suffix.outputs.branch-suffix }}
+      resource-group-name: ${{ case(needs.get-branch-suffix.outputs.branch-suffix == '', 'rg-customer-dev', format('rg-dev{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
+      sql-database-name:  sql-customer-dev${{ needs.get-branch-suffix.outputs.branch-suffix }}
       sql-server-name:  dev-tag
       subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}

@@ -1,18 +1,37 @@
 param app_config_name string
 param app_insights_name string
 param container_app_name string
-param service_name string
 param container_app_image_name string
 param container_app_image_tag string
 param cpu string
 param database_connection_string string
 param environment_name string
 param environment_resource_group_name string
+param latest_revision_no string
+param max_replicas int
 param memory string
 param min_replicas int
-param max_replicas int
-param latest_revision_no string
+param service_type string
 var revisionNo = replace(container_app_image_tag, '.', '')
+
+var ingressSection object | null = service_type == 'api'
+? {
+  external: true
+  targetPort: 8080
+  exposedPort: 0
+  transport: 'Auto'
+  traffic: [
+    {
+      weight: 100
+      latestRevision: true
+    }
+  ]
+  allowInsecure: false
+  clientCertificateMode: 'Ignore'
+  stickySessions: {
+    affinity: 'none'
+  }
+} : null
 
 @secure()
 param container_app_environment_id string
@@ -60,6 +79,7 @@ resource container_app 'Microsoft.App/containerapps@2026-01-01' = {
         }
       ]
       activeRevisionsMode: 'Single'
+      ingress: ingressSection
       registries: [
         {
           server: 'ghcr.io'

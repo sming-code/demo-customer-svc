@@ -3,10 +3,29 @@ param app_insights_name string
 param container_app_name string
 param environment string
 param environment_resource_group_name string
+param service_type string
 param sql_server_name string
 
 var environmentKeyVaultName string = 'kv-${environment}-tag'
 var environmentAppConfigurationName string = 'app-config-${environment}-tag'
+var ingressSection object | null = service_type == 'api'
+? {
+  external: true
+  targetPort: 8080
+  exposedPort: 0
+  transport: 'Auto'
+  traffic: [
+    {
+      weight: 100
+      latestRevision: true
+    }
+  ]
+  allowInsecure: false
+  clientCertificateMode: 'Ignore'
+  stickySessions: {
+    affinity: 'none'
+  }
+} : null
 
 @secure()
 param container_app_environment_id string
@@ -48,23 +67,7 @@ resource container_app 'Microsoft.App/containerapps@2026-01-01' = {
         }
       ]
       activeRevisionsMode: 'Single'
-      ingress: {
-        external: true
-        targetPort: 8080
-        exposedPort: 0
-        transport: 'Auto'
-        traffic: [
-          {
-            weight: 100
-            latestRevision: true
-          }
-        ]
-        allowInsecure: false
-        clientCertificateMode: 'Ignore'
-        stickySessions: {
-          affinity: 'none'
-        }
-      }
+      ingress: ingressSection
       registries: [
         {
           server: 'ghcr.io'
