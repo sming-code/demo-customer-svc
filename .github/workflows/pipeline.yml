@@ -12,6 +12,21 @@ on:
         required: false
         type: boolean
         default: false
+      log-level:
+        description: Log level to use
+        type: choice
+        default: Warning
+        options:
+          - Trace
+          - Debug
+          - Information
+          - Warning
+          - Error
+          - Critical
+      reservation-svc-target-branch:
+        description: Branch to target for Reservation Service api client
+        type: string
+        default: 'default'
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -26,16 +41,9 @@ jobs:
       with:
         major: 1
         minor: 0
-    - name: Display done
-      run: echo "Variables loaded..."
     outputs:
-      project-name-root: DemoApp.Services.Customers
-      app-name: customer
       version-no: ${{ steps.get-version.outputs.version-no }}
       last-release-tag: ${{ steps.get-version.outputs.last-release-tag }}
-      logical-area: private
-      service-name: "Customer Service"
-      service-types: '["Api","Worker"]'
       branch-name: ${{ case(github.head_ref == '', github.ref_name, github.head_ref) }}
 
   build-test:
@@ -51,84 +59,49 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        service-type: ${{ fromJson(needs.variables.outputs.service-types) }}
+        service-type: ${{ fromJson('["Api","Worker"]') }}
     steps:
     - uses: sming-code/build-docker-image-action@v1
       with:
-        project-name-root: ${{ needs.variables.outputs.project-name-root }}
-        image-name-root: ${{ needs.variables.outputs.app-name }}
+        project-name-root: DemoApp.Services.Customers
+        image-name-root: customer
         dockerfile-name-root: Dockerfile
         service-type: ${{ matrix.service-type }}
         version-number: ${{ needs.variables.outputs.version-no }}
 
-  deploy-dev:
-    name: Deploy container app and related resources to environments
-    needs: [ variables, build-docker-images ]
+  get-branch-suffix:
+    name: Get branch suffix
     if: ${{ (github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
-    uses: sming-code/deploy-container-app-to-environment-action/.github/workflows/deploy-container-app-to-environment-action.yml@v1
+    runs-on: ubuntu-latest
+    steps:
+    - uses: sming-code/get-branch-suffix-action@v1
+      id: get-suffix
+      with:
+        branch-name: ${{ case(github.head_ref == '', github.ref_name, github.head_ref) }}
+    outputs:
+      branch-suffix: ${{ steps.get-suffix.outputs.branch-suffix }}
+
+  deploy-dev:
+    name: Deploy container app and related resources to dev environment
+    needs: [ variables, get-branch-suffix, build-docker-images ]
+    if: ${{ (github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
+    uses: ./.github/workflows/deploy-container-app-to-environment.yml
     with:
-      environment: dev
-      logical-area: ${{ needs.variables.outputs.logical-area }}
-      app-name: ${{ needs.variables.outputs.app-name }}
-      service-name: ${{ needs.variables.outputs.service-name }}
+      app-name: customer
+      app-insights-name: insight-customer-dev${{ needs.get-branch-suffix.outputs.branch-suffix }}
+      branch-suffix: ${{ needs.get-branch-suffix.outputs.branch-suffix }}
+      container-app-environment-name: caenv-dev-tag-private
+      environment-name: dev
+      environment-resource-group-name: rg-dev-tag
+      log-analytics-workspace-name: log-analytics-dev-tag
+      resource-group-name: ${{ case(needs.get-branch-suffix.outputs.branch-suffix == '', 'rg-customer-dev', 'rg-dev-needs.get-branch-suffix.outputs.branch-suffix') }}
+      sql-database-name:  sql-customer-dev-${{ needs.get-branch-suffix.outputs.branch-suffix }}
+      sql-server-name:  dev-tag
+      subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}
-      service-types: ${{ needs.variables.outputs.service-types }}
-      branch-name: ${{ needs.variables.outputs.branch-name }}
-      subscription: 'sub-tag-testing'
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
       client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
       tenant-id: ${{ secrets.AZURE_TENANT_ID_DEV }}
       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
-
-  deploy-test:
-    name: Deploy container app and related resources to environments
-    needs: [ variables, deploy-dev ]
-    if: ${{ (github.ref == 'refs/heads/main') }}
-    uses: sming-code/deploy-container-app-to-environment-action/.github/workflows/deploy-container-app-to-environment-action.yml@v1
-    with:
-      environment: test
-      logical-area: ${{ needs.variables.outputs.logical-area }}
-      app-name: ${{ needs.variables.outputs.app-name }}
-      service-name: ${{ needs.variables.outputs.service-name }}
-      version-no: ${{ needs.variables.outputs.version-no }}
-      service-types: ${{ needs.variables.outputs.service-types }}
-      branch-name: ${{ needs.variables.outputs.branch-name }}
-      subscription: 'sub-tag-testing'
-    secrets:
-      ghcr-username: ${{ secrets.GHCR_USERNAME }}
-      ghcr-token: ${{ secrets.GHCR_TOKEN }}
-      client-id: ${{ secrets.AZURE_CLIENT_ID_TEST }}
-      tenant-id: ${{ secrets.AZURE_TENANT_ID_TEST }}
-      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_TEST }}
-
-  deploy-prod:
-    name: Deploy container app and related resources to environments
-    needs: [ variables, deploy-test ]
-    if: ${{ (github.ref == 'refs/heads/main') }}
-    uses: sming-code/deploy-container-app-to-environment-action/.github/workflows/deploy-container-app-to-environment-action.yml@v1
-    with:
-      environment: prod
-      logical-area: ${{ needs.variables.outputs.logical-area }}
-      app-name: ${{ needs.variables.outputs.app-name }}
-      service-name: ${{ needs.variables.outputs.service-name }}
-      version-no: ${{ needs.variables.outputs.version-no }}
-      service-types: ${{ needs.variables.outputs.service-types }}
-      branch-name: ${{ needs.variables.outputs.branch-name }}
-      subscription: 'sub-tag-testing'
-    secrets:
-      ghcr-username: ${{ secrets.GHCR_USERNAME }}
-      ghcr-token: ${{ secrets.GHCR_TOKEN }}
-      client-id: ${{ secrets.AZURE_CLIENT_ID_PROD }}
-      tenant-id: ${{ secrets.AZURE_TENANT_ID_PROD }}
-      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}
-
-  create-release:
-    name: Create release
-    needs: [ variables, deploy-prod ]
-    if: ${{ github.ref == 'refs/heads/main' }}
-    uses: ./.github/workflows/add-github-release.yaml
-    with:
-      version-number: ${{ needs.variables.outputs.version-no }}
-      previous-tag: ${{ needs.variables.outputs.last-release-tag }}

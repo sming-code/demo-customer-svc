@@ -1,0 +1,13 @@
+£file: deploy-app-stage.yml
+£override
+            "Allpay£appName:SubscriptionKey" = "$(prepaidhandlersvc_SubscriptionPrimaryKey)";
+          }
+£with
+            "Allpay£appName:SubscriptionKey" = "$(prepaidhandlersvc_SubscriptionPrimaryKey)";
+            "Allpay£appName:CartaCardHolderIdPrefixes" = "${{ parameters.cartaCardHolderIdPrefixes }}";
+            "Allpay£appName:EnfuceCardHolderIdPrefixes" = "${{ parameters.enfuceCardHolderIdPrefixes }}";
+            "Allpay£appName:IvrTransactionsCount" = "${{ parameters.ivrTransactionsCount }}";
+            "Allpay£appName:EnfuceDebitTransactionCodes" = "${{ parameters.enfuceDebitTransactionCodes }}";
+            "Allpay£appName:EnfuceCreditTransactionCodes" = "${{ parameters.enfuceCreditTransactionCodes }}";
+          }
+£end

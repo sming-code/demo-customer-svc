@@ -1,0 +1,29 @@
+£file: deploy-app-stage.yml
+£override
+  - name: apiDependencies
+    type: string
+    default: ''
+
+steps:
+£with
+  - name: apiDependencies
+    type: string
+    default: ''
+  - name: cartaCardholderIdPrefixes
+    type: string
+    default: ''
+  - name: enfuceCardholderIdPrefixes
+    type: string
+    default: ''
+  - name: ivrTransactionsCount
+    type: string
+    default: '5'
+  - name: enfuceDebitTransactionCodes
+    type: string
+    default: ''
+  - name: enfuceCreditTransactionCodes
+    type: string
+    default: ''
+
+steps:
+£end

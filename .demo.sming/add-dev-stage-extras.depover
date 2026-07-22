@@ -1,0 +1,12 @@
+£file: azure-pipeline.yml
+£override
+        logLevel: ${{ parameters.LogLevel }}
+£with
+        logLevel: ${{ parameters.LogLevel }}
+        cartaCardholderIdPrefixes: $(prepaidhandlersvc_CartaCardHolderIdPrefixes)
+        enfuceCardholderIdPrefixes: $(prepaidhandlersvc_EnfuceCardHolderIdPrefixes)
+        ivrTransactionsCount: $(prepaidhandlersvc_IvrTransactionsCount)
+        enfuceDebitTransactionCodes: $(prepaidhandlersvc_EnfuceDebitTransactionCodes)
+        enfuceCreditTransactionCodes: $(prepaidhandlersvc_EnfuceCreditTransactionCodes)
+£end
+£noInstancesExpected: 4

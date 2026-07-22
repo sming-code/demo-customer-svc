@@ -1,0 +1,7 @@
+£file: main.bicep
+£override
+    serviceBusHostName: serviceBusHostName
+£with
+    serviceBusHostName: serviceBusHostName
+    panServiceTopicName: panServiceTopicName
+£end

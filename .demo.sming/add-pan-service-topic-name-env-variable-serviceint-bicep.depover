@@ -1,0 +1,12 @@
+£file: service-int.bicep
+£override
+          ])
+          image: containerImageName
+£with
+            {
+              name: 'PanServiceTopicName'
+              value: panServiceTopicName
+            }
+          ])
+          image: containerImageName
+£end

@@ -1,0 +1,9 @@
+£InfraProject: Allpay.PrepaidHandlerService.Infrastructure
+£AppName: PrepaidHandler
+£AppType: Svc
+£AppKeyvaultIdentifier: pph
+£SolutionName: PrepaidHandlerService
+£DeployDatabase: false
+£DeployServiceBus: true
+£AddPciServiceDependency: true
+£PciServiceName: PrepaidHandler

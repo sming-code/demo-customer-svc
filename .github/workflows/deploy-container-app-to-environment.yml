@@ -1,0 +1,89 @@
+name: Deploy container app to environment
+
+on:
+  workflow_call:
+    inputs:
+      app-name:
+        required: true
+        type: string
+      app-insights-name:
+        required: true
+        type: string
+      branch-suffix:
+        required: true
+        type: string
+      container-app-environment-name:
+        required: true
+        type: string
+      environment-name:
+        required: true
+        type: string
+      environment-resource-group-name:
+        required: true
+        type: string
+      log-analytics-workspace-name:
+        required: true
+        type: string
+      resource-group-name:
+        required: true
+        type: string
+      sql-database-name:
+        required: true
+        type: string
+      sql-server-name:
+        required: true
+        type: string
+      subscription:
+        required: true
+        type: string
+      version-no:
+        required: true
+        type: string
+    secrets:
+      ghcr-username:
+        required: true
+      ghcr-token:
+        required: true
+      client-id:
+        required: true
+      tenant-id:
+        required: true
+      subscription-id:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-to-environment:
+    environment: ${{ inputs.environment-name }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: azure/login@v3
+      with:
+        client-id: ${{ secrets.client-id }}
+        tenant-id: ${{ secrets.tenant-id }}
+        subscription-id: ${{ secrets.subscription-id }}
+
+    - uses: ./.github/actions/ensure-container-app-dependencies
+
+    - uses: ./.github/actions/deploy-container-app
+      env:
+        container-app-image: 'customer-api'
+        container-app-name: 'customer-api-dev${{ inputs.branch-suffix }}'
+        service-type: api
+        create-empty-container-app-bicep: ./.github/bicep/create-empty-container-app.bicep
+        create-container-app-revision-bicep: ./.github/bicep/create-container-app-revision.bicep
+        ghcr-token: ${{ secrets.ghcr-token }}
+        ghcr-username: ${{ secrets.ghcr-username }}
+
+    - uses: ./.github/actions/deploy-container-app
+      env:
+        container-app-image: 'customer-worker'
+        container-app-name: 'customer-worker-dev${{ inputs.branch-suffix }}'
+        service-type: worker
+        create-empty-container-app-bicep: ./.github/bicep/create-empty-container-no-ingress-app.bicep
+        create-container-app-revision-bicep: ./.github/bicep/create-container-app-no-ingress-revision.bicep
+        ghcr-token: ${{ secrets.ghcr-token }}
+        ghcr-username: ${{ secrets.ghcr-username }}
