@@ -91,7 +91,7 @@ jobs:
         service-type: api
         ghcr-token: ${{ secrets.ghcr-token }}
         ghcr-username: ${{ secrets.ghcr-username }}
-      background: true
+      # background: true
 
     - id: deploy-worker
       uses: ./.github/actions/deploy-container-app
@@ -101,7 +101,7 @@ jobs:
         service-type: worker
         ghcr-token: ${{ secrets.ghcr-token }}
         ghcr-username: ${{ secrets.ghcr-username }}
-      background: true
+      # background: true
     
-    - name: Wait for deployments to complete
-      wait: [ deploy-api, deploy-worker ]
+    # - name: Wait for deployments to complete
+    #   wait: [ deploy-api, deploy-worker ]

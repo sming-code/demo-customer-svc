@@ -118,7 +118,7 @@ resource container_app 'Microsoft.App/containerapps@2026-01-01' = {
             }
             {
               name: 'Service_Name'
-              value: '£service-name'
+              value: 'Customer Service'
             }
           ]
         }
