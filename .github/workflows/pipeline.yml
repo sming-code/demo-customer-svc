@@ -94,7 +94,7 @@ jobs:
       environment-name: dev
       environment-resource-group-name: rg-dev-tag
       log-analytics-workspace-name: log-analytics-dev-tag
-      resource-group-name: ${{ case(needs.get-branch-suffix.outputs.branch-suffix == '', 'rg-customer-dev', 'rg-dev-needs.get-branch-suffix.outputs.branch-suffix') }}
+      resource-group-name: ${{ case(needs.get-branch-suffix.outputs.branch-suffix == '', 'rg-customer-dev', format('rg-dev-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
       sql-database-name:  sql-customer-dev-${{ needs.get-branch-suffix.outputs.branch-suffix }}
       sql-server-name:  dev-tag
       subscription: sub-tag-testing

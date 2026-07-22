@@ -88,8 +88,6 @@ jobs:
         container-app-image: 'customer-api'
         container-app-name: 'customer-api-dev${{ inputs.branch-suffix }}'
         service-type: api
-        create-empty-container-app-bicep: ./.github/bicep/create-empty-container-app.bicep
-        create-container-app-revision-bicep: ./.github/bicep/create-container-app-revision.bicep
         ghcr-token: ${{ secrets.ghcr-token }}
         ghcr-username: ${{ secrets.ghcr-username }}
 
@@ -98,7 +96,5 @@ jobs:
         container-app-image: 'customer-worker'
         container-app-name: 'customer-worker-dev${{ inputs.branch-suffix }}'
         service-type: worker
-        create-empty-container-app-bicep: ./.github/bicep/create-empty-container-no-ingress-app.bicep
-        create-container-app-revision-bicep: ./.github/bicep/create-container-app-no-ingress-revision.bicep
         ghcr-token: ${{ secrets.ghcr-token }}
         ghcr-username: ${{ secrets.ghcr-username }}
