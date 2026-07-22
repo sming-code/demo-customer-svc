@@ -83,18 +83,25 @@ jobs:
 
     - uses: ./.github/actions/ensure-container-app-dependencies
 
-    - uses: ./.github/actions/deploy-container-app
+    - id: deploy-api
+      uses: ./.github/actions/deploy-container-app
       env:
         container-app-image: 'customer-api'
         container-app-name: 'customer-api-dev${{ inputs.branch-suffix }}'
         service-type: api
         ghcr-token: ${{ secrets.ghcr-token }}
         ghcr-username: ${{ secrets.ghcr-username }}
+      background: true
 
-    - uses: ./.github/actions/deploy-container-app
+    - id: deploy-worker
+      uses: ./.github/actions/deploy-container-app
       env:
         container-app-image: 'customer-worker'
         container-app-name: 'customer-worker-dev${{ inputs.branch-suffix }}'
         service-type: worker
         ghcr-token: ${{ secrets.ghcr-token }}
         ghcr-username: ${{ secrets.ghcr-username }}
+      background: true
+    
+    - name: Wait for deployments to complete
+      wait: [ deploy-api, deploy-worker ]
