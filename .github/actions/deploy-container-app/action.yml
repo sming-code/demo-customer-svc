@@ -39,7 +39,7 @@ runs:
     uses: azure/sql-action@v2.3
     with:
       connection-string: "Server=tcp:${{ env.sql-server-name }}.database.windows.net,1433;Initial Catalog=${{ env.sql-database-name }};Authentication=Active Directory Default;Encrypt=True;"
-      path: ${{ github.action_path }}/sql/initialize-user.sql
+      path: ./.github/sql/initialize-user.sql
       arguments: '-v CaName=${{ env.container-app-name }}'
 
   - name: deploy-container-app-revision

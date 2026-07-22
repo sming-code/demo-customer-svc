@@ -28,7 +28,7 @@ runs:
     uses: azure/arm-deploy@v2
     with:
       resourceGroupName: ${{ env.resource-group-name }}
-      template: ${{ github.action_path }}/bicep/create-app-insights.bicep
+      template: ./.github/bicep/create-app-insights.bicep
       deploymentName: 'deploy-${{ env.app-insights-name }}'
       scope: resourcegroup
       parameters: log_analytics_workspace_name=${{ env.log-analytics-workspace-name }} log_analytics_resource_group_name=${{ env.environment-resource-group-name }} app_insights_name=${{ env.app-insights-name }}
@@ -38,7 +38,7 @@ runs:
     uses: azure/arm-deploy@v2
     with:
       resourceGroupName: ${{ env.environment-resource-group-name }}
-      template: ${{ github.action_path }}/bicep/create-database.bicep
+      template: ./.github/bicep/create-database.bicep
       deploymentName: 'create-${{ env.sql-database-name }}'
       scope: resourcegroup
       parameters: database_name=${{ env.sql-database-name }} server_name=${{ env.sql-server-name }}
