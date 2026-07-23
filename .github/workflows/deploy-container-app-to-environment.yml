@@ -70,7 +70,7 @@ env:
   version-no: ${{ inputs.version-no }}
 
 jobs:
-  deploy-to-environment:
+  ensure-dependencies-for-environment:
     environment: ${{ inputs.environment-name }}
     runs-on: ubuntu-latest
     steps:
@@ -83,25 +83,25 @@ jobs:
 
     - uses: ./.github/actions/ensure-container-app-dependencies
 
-    - id: deploy-api
-      uses: ./.github/actions/deploy-container-app
-      env:
-        container-app-image: 'customer-api'
-        container-app-name: 'customer-api-dev${{ inputs.branch-suffix }}'
-        service-type: api
-        ghcr-token: ${{ secrets.ghcr-token }}
-        ghcr-username: ${{ secrets.ghcr-username }}
-      # background: true
+  deploy-to-environment:
+    environment: ${{ inputs.environment-name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        service-type: [ api, worker ]
+    steps:
+    - uses: actions/checkout@v6
+    - uses: azure/login@v3
+      with:
+        client-id: ${{ secrets.client-id }}
+        tenant-id: ${{ secrets.tenant-id }}
+        subscription-id: ${{ secrets.subscription-id }}
 
-    - id: deploy-worker
-      uses: ./.github/actions/deploy-container-app
+    - uses: ./.github/actions/deploy-container-app
       env:
-        container-app-image: 'customer-worker'
-        container-app-name: 'customer-worker-dev${{ inputs.branch-suffix }}'
-        service-type: worker
+        container-app-image: 'customer-${{ matrix.service-type }}'
+        container-app-name: 'customer-${{ matrix.service-type }}-${{ env.environment-name }}${{ inputs.branch-suffix }}'
+        service-type: ${{ matrix.service-type }}
         ghcr-token: ${{ secrets.ghcr-token }}
         ghcr-username: ${{ secrets.ghcr-username }}
-      # background: true
-    
-    # - name: Wait for deployments to complete
-    #   wait: [ deploy-api, deploy-worker ]
