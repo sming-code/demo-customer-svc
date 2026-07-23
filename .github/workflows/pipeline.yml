@@ -25,8 +25,12 @@ on:
           - Critical
       reservation-svc-target-branch:
         description: Branch to target for Reservation Service api client
-        type: string
-        default: 'default'
+        type: choice
+        options:
+          - default
+          - branch
+        default: default
+        required: true
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
