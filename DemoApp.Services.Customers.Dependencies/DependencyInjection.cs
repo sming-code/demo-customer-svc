@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SmingCode.Utilities.ServiceApiClient.Config;
 using SmingCode.Utilities.StartupProcesses;
 
 namespace DemoApp.Services.Customers.Dependencies;
+using Apis.ReservationService;
 using Databases.Customers;
 using Databases.Customers.Context;
 
@@ -26,6 +28,16 @@ public static class DependencyInjection
         {
             options.UseSqlServer(connectionString);
         });
+
+        services.AddApiClient<ReservationServiceApi>(
+            "Reservation Service",
+            "reservation-svc",
+            httpClient =>
+            {
+                httpClient.BaseAddress = new Uri(configuration["Apis:ReservationService:BaseAddress"]!);
+            }
+        );
+
 
         services.AddScoped<IServiceInitializer, DatabaseInitialization>();
 

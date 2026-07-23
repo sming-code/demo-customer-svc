@@ -13,7 +13,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.7" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.9" />
+    <PackageReference Include="SmingCode.Utilities.ServiceApiClient" Version="1.0.35" />
     <PackageReference Include="SmingCode.Utilities.StartupProcesses" Version="1.0.35" />
   </ItemGroup>
 

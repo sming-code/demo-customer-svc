@@ -1,0 +1,7 @@
+£project-name-root: DemoApp.Services.Customers
+£dependencies-project: Dependencies
+£app-name: customer
+£friendly-name: Customer Service
+£logical-area: private
+£service-types: Api,Worker
+£solution-name: customer-service.slnx

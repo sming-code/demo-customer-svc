@@ -1,7 +1,0 @@
-£file: azure-pipeline.yml
-£override
-  uaiName: "ad-$(EnvironmentName)-prepaidhandlersvc-backendservices"
-£with
-  uaiName: "ad-$(EnvironmentName)-prepaidhandlersvc-backendservices"
-  panServiceTopicName: 'allpay.azure.servicebus.topic.panservice.requests'
-£end

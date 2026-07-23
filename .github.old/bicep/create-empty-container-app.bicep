@@ -1,21 +1,13 @@
 param app_config_name string
 param app_insights_name string
 param container_app_name string
-param container_app_image_name string
-param container_app_image_tag string
-param cpu string
-param database_connection_string string
-param environment_name string
+param environment string
 param environment_resource_group_name string
-param latest_revision_no string
-param max_replicas int
-param memory string
-param min_replicas int
 param service_type string
-param reservation_svc_target_branch string
+param sql_server_name string
 
-var revisionNo = replace(container_app_image_tag, '.', '')
-
+var environmentKeyVaultName string = 'kv-${environment}-tag'
+var environmentAppConfigurationName string = 'app-config-${environment}-tag'
 var ingressSection object | null = service_type == 'api'
 ? {
   external: true
@@ -50,12 +42,6 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2024-06-01' e
   name: app_config_name
   scope: resourceGroup(environment_resource_group_name)
 }
-
-var newRevisionSuffixNo = startsWith(latest_revision_no, 'v${revisionNo}')
-  ? contains(latest_revision_no, '-')
-    ? format('{0}-{1}', revisionNo, int(split(latest_revision_no, '-')[1]) + 1)
-    : '${revisionNo}-0'
-  : revisionNo
 
 resource container_app 'Microsoft.App/containerapps@2026-01-01' = {
   name: container_app_name
@@ -95,47 +81,45 @@ resource container_app 'Microsoft.App/containerapps@2026-01-01' = {
     template: {
       containers: [
         {
-          image: 'ghcr.io/sming-code/${container_app_image_name}:${container_app_image_tag}'
+          image: 'ghcr.io/sming-code/empty-service-worker:1.0.0'
           name: container_app_name
           resources: {
-            cpu: json(cpu)
-            memory: memory
+            cpu: json('0.25')
+            memory: '0.5Gi'
           }
-          env: [
-            {
-              name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-              secretRef: 'app-insights-endpoint'
-            }
-            {
-              name: 'App_Config_Endpoint'
-              secretRef: 'app-config-endpoint'
-            }
-            {
-              name: 'Database__ConnectionString'
-              value: database_connection_string
-            }
-            {
-              name: 'Tag_Environment'
-              value: environment_name
-            }
-            {
-              name: 'Service_Name'
-              value: 'Customer Service ${toUpper(substring(service_type, 0, 1))}${substring(service_type, 1)}'
-            }
-            {
-              name: 'reservation_svc_target_branch'
-              value: reservation_svc_target_branch
-            }
-          ]
         }
       ]
-      revisionSuffix: 'v${newRevisionSuffixNo}'
+      revisionSuffix: '0000'
       scale: {
-        minReplicas: min_replicas
-        maxReplicas: max_replicas
+        minReplicas: 1
+        maxReplicas: 1
         cooldownPeriod: 300
         pollingInterval: 30
       }
     }
   }
+}
+
+module keyvaultAppPolicyAssignment 'keyvault-secrets-user-role-assignment.bicep' = {
+  params: {
+    keyvaultName: environmentKeyVaultName
+    principalId: container_app.identity.principalId
+  }
+  scope: resourceGroup(environment_resource_group_name)
+}
+
+module appConfigurationPolicyAssignment 'app-configuration-user-role-assignment.bicep' = {
+  params: {
+    appConfigStoreName: environmentAppConfigurationName
+    principalId: container_app.identity.principalId
+  }
+  scope: resourceGroup(environment_resource_group_name)
+}
+
+module sqlServerContributorPolicyAssignment 'sql-db-contributor-role-assignment.bicep' = {
+  params: {
+    serverName: sql_server_name
+    principalId: container_app.identity.principalId
+  }
+  scope: resourceGroup(environment_resource_group_name)
 }

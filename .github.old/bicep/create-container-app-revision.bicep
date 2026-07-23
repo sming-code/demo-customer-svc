@@ -12,8 +12,6 @@ param max_replicas int
 param memory string
 param min_replicas int
 param service_type string
-param reservation_svc_target_branch string
-
 var revisionNo = replace(container_app_image_tag, '.', '')
 
 var ingressSection object | null = service_type == 'api'
@@ -120,11 +118,7 @@ resource container_app 'Microsoft.App/containerapps@2026-01-01' = {
             }
             {
               name: 'Service_Name'
-              value: 'Customer Service ${toUpper(substring(service_type, 0, 1))}${substring(service_type, 1)}'
-            }
-            {
-              name: 'reservation_svc_target_branch'
-              value: reservation_svc_target_branch
+              value: 'Customer Service'
             }
           ]
         }

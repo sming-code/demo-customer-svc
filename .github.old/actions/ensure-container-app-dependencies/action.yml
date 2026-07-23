@@ -22,6 +22,7 @@ runs:
       echo "app-insights-exists=$appInsightsExists" >> $GITHUB_OUTPUT
       echo "sql-database-exists=$sqlDatabaseExists" >> $GITHUB_OUTPUT
 
+
   - name: ensure-app-insights-exists
     if: ${{ steps.resource-existence.outputs.app-insights-exists == 0 }}
     uses: azure/bicep-deploy@v2

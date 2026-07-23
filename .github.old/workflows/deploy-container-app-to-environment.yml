@@ -81,7 +81,7 @@ jobs:
         tenant-id: ${{ secrets.tenant-id }}
         subscription-id: ${{ secrets.subscription-id }}
 
-    - uses: ./.github/actions/ensure-container-app-dependencies
+    - uses: sming-code/ensure-container-app-dependencies-action@v1
       env:
         subscription-id: ${{ secrets.subscription-id }}
 

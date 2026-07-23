@@ -1,7 +1,0 @@
-£file: main.bicep
-£override
-param serviceBusResourceName string
-£with
-param serviceBusResourceName string
-param panServiceTopicName string
-£end

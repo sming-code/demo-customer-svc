@@ -1,7 +1,0 @@
-£file: deploy-app-stage.yml
-£override
-            serviceBusResourceName = "allpay-$(EnvironmentName)-servicebus-primary"
-£with
-            serviceBusResourceName = "allpay-$(EnvironmentName)-servicebus-primary"
-            panServiceTopicName = "$(panServiceTopicName)"
-£end

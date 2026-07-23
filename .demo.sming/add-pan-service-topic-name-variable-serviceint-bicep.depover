@@ -1,7 +1,0 @@
-£file: service-int.bicep
-£override
-param revisionSuffix string = ''
-£with
-param revisionSuffix string = ''
-param panServiceTopicName string
-£end

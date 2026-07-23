@@ -83,4 +83,3 @@ runs:
         service_type: ${{ env.service-type }}
         environment_name: ${{ env.environment-name }}
         latest_revision_no: ${{ steps.container-app-principal-id.outputs.latest-revision-no }}
-        reservation_svc_target_branch: ${{ env.reservation-svc-target-branch }}
