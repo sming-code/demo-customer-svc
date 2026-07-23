@@ -82,6 +82,8 @@ jobs:
         subscription-id: ${{ secrets.subscription-id }}
 
     - uses: ./.github/actions/ensure-container-app-dependencies
+      env:
+        subscription-id: ${{ secrets.subscription-id }}
 
   deploy-to-environment:
     environment: ${{ inputs.environment-name }}
