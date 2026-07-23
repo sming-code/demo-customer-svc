@@ -84,3 +84,5 @@ runs:
         environment_name: ${{ env.environment-name }}
         latest_revision_no: ${{ steps.container-app-principal-id.outputs.latest-revision-no }}
         reservation_svc_target_branch: ${{ env.reservation-svc-target-branch }}
+        ppl_svc_target_branch: ${{ env.ppl-svc-target-branch }}
+        broken_svc_target_branch: ${{ env.broken-svc-target-branch }}

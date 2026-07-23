@@ -38,6 +38,23 @@ public static class DependencyInjection
             }
         );
 
+        services.AddApiClient<ReservationServiceApi>(
+            "PPL Service",
+            "ppl-svc",
+            httpClient =>
+            {
+                httpClient.BaseAddress = new Uri(configuration["Apis:ReservationService:BaseAddress"]!);
+            }
+        );
+
+        services.AddApiClient<ReservationServiceApi>(
+            "Broken Service",
+            "broken-svc",
+            httpClient =>
+            {
+                httpClient.BaseAddress = new Uri(configuration["Apis:ReservationService:BaseAddress"]!);
+            }
+        );
 
         services.AddScoped<IServiceInitializer, DatabaseInitialization>();
 

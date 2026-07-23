@@ -31,11 +31,29 @@ on:
           - branch
         default: default
         required: true
+      ppl-svc-target-branch:
+        description: Branch to target for PPL Service api client
+        type: choice
+        options:
+          - default
+          - branch
+        default: default
+        required: true
+      broken-svc-target-branch:
+        description: Branch to target for Broken Service api client
+        type: choice
+        options:
+          - default
+          - branch
+        default: default
+        required: true
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   log-level: ${{ inputs.log-level }}
   reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
+  ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
+  broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
 
 jobs:
   variables:
@@ -89,7 +107,7 @@ jobs:
   deploy-dev:
     name: Deploy container app and related resources to dev environment
     needs: [ variables, get-branch-suffix, build-docker-images  ]
-    if: ${{ github.ref == 'refs/heads/main') 
+    if: ${{ github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
     uses: ./.github/workflows/deploy-container-app-to-environment.yml
     with:
       app-name: customer
@@ -110,7 +128,7 @@ jobs:
       client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
       tenant-id: ${{ secrets.AZURE_TENANT_ID_DEV }}
       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
-      
+
   deploy-test:
     name: Deploy container app and related resources to test environment
     needs: [ variables, get-branch-suffix, build-docker-images , deploy-dev ]
@@ -135,7 +153,7 @@ jobs:
       client-id: ${{ secrets.AZURE_CLIENT_ID_TEST }}
       tenant-id: ${{ secrets.AZURE_TENANT_ID_TEST }}
       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_TEST }}
-      
+
   deploy-prod:
     name: Deploy container app and related resources to prod environment
     needs: [ variables, get-branch-suffix, build-docker-images , deploy-test ]
@@ -160,4 +178,4 @@ jobs:
       client-id: ${{ secrets.AZURE_CLIENT_ID_PROD }}
       tenant-id: ${{ secrets.AZURE_TENANT_ID_PROD }}
       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}
-      
+
