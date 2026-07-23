@@ -71,7 +71,7 @@ runs:
         container_app_name: ${{ env.container-app-name }}
         container_app_image_name: ${{ env.container-app-image }}
         container_app_image_tag: ${{ env.version-no }}
-        cpu: 0.5
+        cpu: '0.5'
         environment_resource_group_name: ${{ env.environment-resource-group-name }}
         memory: 1Gi
         min_replicas: 1
