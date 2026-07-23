@@ -104,5 +104,6 @@ jobs:
         container-app-image: 'customer-${{ matrix.service-type }}'
         container-app-name: 'customer-${{ matrix.service-type }}-${{ env.environment-name }}${{ inputs.branch-suffix }}'
         service-type: ${{ matrix.service-type }}
+        subscription-id: ${{ secrets.subscription-id }}
         ghcr-token: ${{ secrets.ghcr-token }}
         ghcr-username: ${{ secrets.ghcr-username }}
