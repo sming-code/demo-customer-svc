@@ -107,7 +107,7 @@ jobs:
   deploy-dev:
     name: Deploy container app and related resources to dev environment
     needs: [ variables, get-branch-suffix, build-docker-images  ]
-    if: ${{ github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
+    if: ${{ (github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
     uses: ./.github/workflows/deploy-container-app-to-environment.yml
     with:
       app-name: customer
