@@ -1,0 +1,123 @@
+name: Deploy container app to environment
+
+on:
+  workflow_call:
+    inputs:
+      app-name:
+        required: true
+        type: string
+      app-insights-name:
+        required: true
+        type: string
+      branch-suffix:
+        required: true
+        type: string
+      container-app-environment-name:
+        required: true
+        type: string
+      environment-name:
+        required: true
+        type: string
+      environment-resource-group-name:
+        required: true
+        type: string
+      log-analytics-workspace-name:
+        required: true
+        type: string
+      resource-group-name:
+        required: true
+        type: string
+      sql-database-name:
+        required: true
+        type: string
+      sql-server-name:
+        required: true
+        type: string
+      subscription:
+        required: true
+        type: string
+      version-no:
+        required: true
+        type: string
+      reservation-svc-target-branch:
+        required: true
+        type: string
+      ppl-svc-target-branch:
+        required: true
+        type: string
+      broken-svc-target-branch:
+        required: true
+        type: string
+    secrets:
+      ghcr-username:
+        required: true
+      ghcr-token:
+        required: true
+      client-id:
+        required: true
+      tenant-id:
+        required: true
+      subscription-id:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  app-name: ${{ inputs.app-name }}
+  app-insights-name: ${{ inputs.app-insights-name }}
+  branch-suffix: ${{ inputs.branch-suffix }}
+  container-app-environment-name: ${{ inputs.container-app-environment-name }}
+  environment-name: ${{ inputs.environment-name }}
+  environment-resource-group-name: ${{ inputs.environment-resource-group-name }}
+  log-analytics-workspace-name: ${{ inputs.log-analytics-workspace-name }}
+  resource-group-name: ${{ inputs.resource-group-name }}
+  sql-database-name: ${{ inputs.sql-database-name }}
+  sql-server-name: ${{ inputs.sql-server-name }}
+  subscription: ${{ inputs.subscription }}
+  version-no: ${{ inputs.version-no }}
+  reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
+  ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
+  broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
+
+jobs:
+  ensure-dependencies-for-environment:
+    environment: ${{ inputs.environment-name }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - uses: azure/login@v3
+      with:
+        client-id: ${{ secrets.client-id }}
+        tenant-id: ${{ secrets.tenant-id }}
+        subscription-id: ${{ secrets.subscription-id }}
+
+    - uses: sming-code/ensure-container-app-dependencies-action@v1
+      env:
+        subscription-id: ${{ secrets.subscription-id }}
+
+  deploy-to-environment:
+    environment: ${{ inputs.environment-name }}
+    runs-on: ubuntu-latest
+    needs: [ ensure-dependencies-for-environment ]
+    strategy:
+      fail-fast: true
+      matrix:
+        service-type: [ api, worker ]
+    steps:
+    - uses: actions/checkout@v6
+    - uses: azure/login@v3
+      with:
+        client-id: ${{ secrets.client-id }}
+        tenant-id: ${{ secrets.tenant-id }}
+        subscription-id: ${{ secrets.subscription-id }}
+
+    - uses: ./.github/actions/deploy-container-app
+      env:
+        container-app-image: 'customer-${{ matrix.service-type }}'
+        container-app-name: 'customer-${{ matrix.service-type }}-${{ env.environment-name }}${{ inputs.branch-suffix }}'
+        service-type: ${{ matrix.service-type }}
+        subscription-id: ${{ secrets.subscription-id }}
+        ghcr-token: ${{ secrets.ghcr-token }}
+        ghcr-username: ${{ secrets.ghcr-username }}
