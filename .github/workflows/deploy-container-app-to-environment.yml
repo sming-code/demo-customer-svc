@@ -82,7 +82,8 @@ env:
   broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
 
 jobs:
-  ensure-dependencies-for-environment:
+  deploy-to-environment-dependencies:
+    name: Deploy to environment (ensure dependencies)
     environment: ${{ inputs.environment-name }}
     runs-on: ubuntu-latest
     steps:
@@ -98,9 +99,9 @@ jobs:
         subscription-id: ${{ secrets.subscription-id }}
 
   deploy-to-environment:
-    environment: ${{ inputs.environment-name }}
+    name: Deploy to environment (container app)
     runs-on: ubuntu-latest
-    needs: [ ensure-dependencies-for-environment ]
+    needs: [ deploy-to-environment-dependencies ]
     strategy:
       fail-fast: true
       matrix:
