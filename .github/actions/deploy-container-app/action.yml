@@ -4,12 +4,14 @@ description: 'Deploy a container app and associated resources to azure'
 runs:
   using: "composite"
   steps:
-  - name: get-container-app-revision-no
-    id: container-app-revision-no
+  - name: get-required-variables
+    id: container-app-variables
     shell: bash
     run: |
+      caeId="$(az containerapp env list -g ${{ env.environment-resource-group-name }} --query '[?name==`'${{ env.container-app-environment-name }}'`].id | [0]')"
       latestRevisionNo="$(az containerapp show --name ${{ env.container-app-name }} -g ${{ env.resource-group-name }} --query 'properties.template.revisionSuffix')"
       echo "latest-revision-no=$latestRevisionNo" >> $GITHUB_OUTPUT
+      echo "cae-id=$caeId" >> $GITHUB_OUTPUT
 
   - name: deploy-container-app-revision
     uses: azure/bicep-deploy@v2
@@ -33,12 +35,12 @@ runs:
         min_replicas: 1
         max_replicas: 1
         database_connection_string: Server=tcp:${{ env.sql-server-name }}.database.windows.net,1433;Authentication="Active Directory Managed Identity";Encrypt=True;Database=${{ env.sql-database-name }}
-        container_app_environment_id: ${{ steps.container-app-required-variables.outputs.cae-id }}
+        container_app_environment_id: ${{ steps.container-app-variables.outputs.cae-id }}
         ghcr_username: ${{ env.ghcr-username }}
         ghcr_token: ${{ env.ghcr-token }}
         service_type: ${{ env.service-type }}
         environment_name: ${{ env.environment-name }}
-        latest_revision_no: ${{ steps.container-app-revision-no.outputs.latest-revision-no }}
+        latest_revision_no: ${{ steps.container-app-variables.outputs.latest-revision-no }}
         reservation_svc_target_branch: ${{ env.reservation-svc-target-branch }}
         ppl_svc_target_branch: ${{ env.ppl-svc-target-branch }}
         broken_svc_target_branch: ${{ env.broken-svc-target-branch }}
