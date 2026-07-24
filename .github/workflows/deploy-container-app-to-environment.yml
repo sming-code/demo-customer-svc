@@ -39,6 +39,15 @@ on:
       version-no:
         required: true
         type: string
+      reservation-svc-target-branch:
+        required: true
+        type: string
+      ppl-svc-target-branch:
+        required: true
+        type: string
+      broken-svc-target-branch:
+        required: true
+        type: string
     secrets:
       ghcr-username:
         required: true
@@ -68,6 +77,9 @@ env:
   sql-server-name: ${{ inputs.sql-server-name }}
   subscription: ${{ inputs.subscription }}
   version-no: ${{ inputs.version-no }}
+  reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
+  ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
+  broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
 
 jobs:
   ensure-dependencies-for-environment:

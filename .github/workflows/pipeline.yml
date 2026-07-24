@@ -51,9 +51,6 @@ on:
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   log-level: ${{ inputs.log-level }}
-  reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
-  ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
-  broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
 
 jobs:
   variables:
@@ -122,6 +119,9 @@ jobs:
       sql-server-name: dev-tag
       subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}
+      reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
+      ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
+      broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
@@ -147,6 +147,9 @@ jobs:
       sql-server-name: test-tag
       subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}
+      reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
+      ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
+      broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
@@ -172,6 +175,9 @@ jobs:
       sql-server-name: prod-tag
       subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}
+      reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
+      ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
+      broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
