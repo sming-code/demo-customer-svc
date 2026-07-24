@@ -80,6 +80,9 @@ env:
   reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
   ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
   broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
+  ghcr-token: ${{ secrets.ghcr-token }}
+  ghcr-username: ${{ secrets.ghcr-username }}
+  subscription-id: ${{ secrets.subscription-id }}
 
 jobs:
   deploy-to-environment-dependencies:
@@ -95,30 +98,64 @@ jobs:
         subscription-id: ${{ secrets.subscription-id }}
 
     - uses: sming-code/ensure-container-app-dependencies-action@v1
-      env:
-        subscription-id: ${{ secrets.subscription-id }}
 
-  deploy-to-environment:
-    name: Deploy to environment (container app)
-    runs-on: ubuntu-latest
-    needs: [ deploy-to-environment-dependencies ]
-    strategy:
-      fail-fast: true
-      matrix:
-        service-type: [ api, worker ]
-    steps:
-    - uses: actions/checkout@v6
-    - uses: azure/login@v3
+    - id: ensure-api-container-app
+      uses: ./.github/actions/ensure-container-app
+      env:
+        service-type: api
+        container-app-name: 'customer-api-${{ env.environment-name }}${{ inputs.branch-suffix }}'
+      background: true
+
+    - id: ensure-worker-container-app
+      uses: ./.github/actions/ensure-container-app
+      env:
+        service-type: worker
+        container-app-name: 'customer-worker-${{ env.environment-name }}${{ inputs.branch-suffix }}'
+      background: true
+
+    - name: Wait for container apps to be ensured
+      wait: [ ensure-api-container-app, ensure-worker-container-app ]
+
+    - name: get-container-app-principal-ids
+      id: container-app-principal-ids
+      shell: bash
+      run: |
+        principalIdApi="$(az containerapp show --name customer-api-${{ env.environment-name }}${{ inputs.branch-suffix }} -g ${{ env.resource-group-name }} --query 'identity.principalId')"
+        principalIdWorker="$(az containerapp show --name customer-worker-${{ env.environment-name }}${{ inputs.branch-suffix }} -g ${{ env.resource-group-name }} --query 'identity.principalId')"
+        echo "principal-id-api=$principalIdApi" >> $GITHUB_OUTPUT
+        echo "principal-id-worker=$principalIdWorker" >> $GITHUB_OUTPUT
+
+    - name: ensure-container-app-api-sql-server-access
+      if: ${{ steps.ensure-api-container-app.outputs.container-app-exists == 0 }}
+      uses: azure/sql-action@v2.3
       with:
-        client-id: ${{ secrets.client-id }}
-        tenant-id: ${{ secrets.tenant-id }}
-        subscription-id: ${{ secrets.subscription-id }}
+        connection-string: Server=tcp:${{ env.sql-server-name }}.database.windows.net,1433;Initial Catalog=${{ env.sql-database-name }};Authentication=Active Directory Default;Encrypt=True;
+        path: ./.github/sql/initialize-user.sql
+        arguments: '-v CaName=customer-api-${{ env.environment-name }}${{ inputs.branch-suffix }}'
 
-    - uses: ./.github/actions/deploy-container-app
+    - name: ensure-container-app-worker-sql-server-access
+      if: ${{ steps.ensure-worker-container-app.outputs.container-app-exists == 0 }}
+      uses: azure/sql-action@v2.3
+      with:
+        connection-string: Server=tcp:${{ env.sql-server-name }}.database.windows.net,1433;Initial Catalog=${{ env.sql-database-name }};Authentication=Active Directory Default;Encrypt=True;
+        path: ./.github/sql/initialize-user.sql
+        arguments: '-v CaName=customer-worker-${{ env.environment-name }}${{ inputs.branch-suffix }}'
+    
+    - id: create-api-container-app-revision
+      uses: ./.github/actions/deploy-container-app
       env:
-        container-app-image: 'customer-${{ matrix.service-type }}'
-        container-app-name: 'customer-${{ matrix.service-type }}-${{ env.environment-name }}${{ inputs.branch-suffix }}'
-        service-type: ${{ matrix.service-type }}
-        subscription-id: ${{ secrets.subscription-id }}
-        ghcr-token: ${{ secrets.ghcr-token }}
-        ghcr-username: ${{ secrets.ghcr-username }}
+        service-type: api
+        container-app-image: 'customer-api'
+        container-app-name: 'customer-api-${{ env.environment-name }}${{ inputs.branch-suffix }}'
+      background: true
+
+    - id: create-worker-container-app-revision
+      uses: ./.github/actions/deploy-container-app
+      env:
+        service-type: worker
+        container-app-image: 'customer-worker'
+        container-app-name: 'customer-worker-${{ env.environment-name }}${{ inputs.branch-suffix }}'
+      background: true
+
+    - name: Wait for container apps to be deployed
+      wait: [ create-api-container-app-revision, create-worker-container-app-revision ]
