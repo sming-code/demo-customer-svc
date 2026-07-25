@@ -143,7 +143,7 @@ jobs:
         connection-string: Server=tcp:${{ env.sql-server-name }}.database.windows.net,1433;Initial Catalog=${{ env.sql-database-name }};Authentication=Active Directory Default;Encrypt=True;
         path: ./.github/sql/initialize-user.sql
         arguments: '-v CaName=customer-worker-${{ env.environment-name }}${{ inputs.branch-suffix }}'
-
+    
     - id: create-api-container-app-revision
       uses: ./.github/actions/deploy-container-app
       env:
@@ -161,7 +161,4 @@ jobs:
       background: true
 
     - name: Wait for container apps to be deployed
-      wait: [
-        create-api-container-app-revision,
-        create-worker-container-app-revision,
-      ]
+      wait: [ create-api-container-app-revision, create-worker-container-app-revision ]
