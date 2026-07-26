@@ -119,7 +119,7 @@ jobs:
       sql-server-name: dev-tag
       subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}
-      reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
+      reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix) }}
       ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
       broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
     secrets:
