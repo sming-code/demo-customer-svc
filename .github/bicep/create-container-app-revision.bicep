@@ -12,9 +12,9 @@ param max_replicas int
 param memory string
 param min_replicas int
 param service_type string
-param reservation_svc_target_branch string
-param ppl_svc_target_branch string
-param broken_svc_target_branch string
+param reservation_svc_target_branch string = ''
+param ppl_svc_target_branch string = ''
+param broken_svc_target_branch string = ''
 
 var revisionNo = replace(container_app_image_tag, '.', '')
 
