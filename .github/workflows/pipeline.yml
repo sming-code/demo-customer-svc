@@ -103,7 +103,7 @@ jobs:
 
   deploy-dev:
     name: Deploy container app and related resources to dev environment
-    needs: [ variables, get-branch-suffix, build-docker-images , build-test ]
+    needs: [ variables, get-branch-suffix, build-docker-images, build-test ]
     if: ${{ (github.ref == 'refs/heads/main') || (inputs.deploy-to-dev == true) }}
     uses: ./.github/workflows/deploy-container-app-to-environment.yml
     with:
@@ -119,9 +119,9 @@ jobs:
       sql-server-name: dev-tag
       subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}
-      reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)}}
-      ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)}}
-      broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)}}
+      reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
+      ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
+      broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
@@ -131,7 +131,7 @@ jobs:
 
   deploy-test:
     name: Deploy container app and related resources to test environment
-    needs: [ variables, get-branch-suffix, build-docker-images , deploy-dev ]
+    needs: [ variables, get-branch-suffix, build-docker-images, deploy-dev ]
     if: ${{ (github.ref == 'refs/heads/main') }}
     uses: ./.github/workflows/deploy-container-app-to-environment.yml
     with:
@@ -147,9 +147,9 @@ jobs:
       sql-server-name: test-tag
       subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}
-      reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)}}
-      ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)}}
-      broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)}}
+      reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
+      ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
+      broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
@@ -159,7 +159,7 @@ jobs:
 
   deploy-prod:
     name: Deploy container app and related resources to prod environment
-    needs: [ variables, get-branch-suffix, build-docker-images , deploy-test ]
+    needs: [ variables, get-branch-suffix, build-docker-images, deploy-test ]
 
     uses: ./.github/workflows/deploy-container-app-to-environment.yml
     with:
@@ -175,9 +175,9 @@ jobs:
       sql-server-name: prod-tag
       subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}
-      reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)}}
-      ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)}}
-      broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)}}
+      reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
+      ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
+      broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', format('-{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
