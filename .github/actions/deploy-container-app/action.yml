@@ -44,3 +44,5 @@ runs:
         reservation_svc_target_branch: ${{ env.reservation-svc-target-branch }}
         ppl_svc_target_branch: ${{ env.ppl-svc-target-branch }}
         broken_svc_target_branch: ${{ env.broken-svc-target-branch }}
+        send_customer_create_target_branch: ${{ env.send-customer-create-target-branch }}
+        consume_customer_create_target_branch: ${{ env.consume-customer-create-target-branch }}

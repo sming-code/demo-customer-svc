@@ -47,6 +47,22 @@ on:
           - branch
         default: default
         required: true
+      send-customer-create-target-branch:
+        description: Branch to target when sending to customer-create topic
+        type: choice
+        options:
+          - default
+          - branch
+        default: default
+        required: true
+      consume-customer-create-target-branch:
+        description: Branch to target when consuming from customer-create topic
+        type: choice
+        options:
+          - default
+          - branch
+        default: default
+        required: true
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -122,6 +138,8 @@ jobs:
       reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
+      send-customer-create-target-branch: ${{ case(inputs.send-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
+      consume-customer-create-target-branch: ${{ case(inputs.consume-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
@@ -150,6 +168,8 @@ jobs:
       reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
+      send-customer-create-target-branch: ${{ case(inputs.send-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
+      consume-customer-create-target-branch: ${{ case(inputs.consume-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
@@ -178,6 +198,8 @@ jobs:
       reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
+      send-customer-create-target-branch: ${{ case(inputs.send-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
+      consume-customer-create-target-branch: ${{ case(inputs.consume-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
       ghcr-token: ${{ secrets.GHCR_TOKEN }}
