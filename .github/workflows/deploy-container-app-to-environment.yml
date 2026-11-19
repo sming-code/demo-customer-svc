@@ -48,9 +48,6 @@ on:
       broken-svc-target-branch:
         required: true
         type: string
-      send-customer-create-target-branch:
-        required: true
-        type: string
       consume-customer-create-target-branch:
         required: true
         type: string
@@ -86,7 +83,6 @@ env:
   reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
   ppl-svc-target-branch: ${{ inputs.ppl-svc-target-branch }}
   broken-svc-target-branch: ${{ inputs.broken-svc-target-branch }}
-  send-customer-create-target-branch: ${{ inputs.send-customer-create-target-branch }}
   consume-customer-create-target-branch: ${{ inputs.consume-customer-create-target-branch }}
   ghcr-token: ${{ secrets.ghcr-token }}
   ghcr-username: ${{ secrets.ghcr-username }}

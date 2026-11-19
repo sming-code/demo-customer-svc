@@ -5,3 +5,6 @@
 £logical-area: private
 £service-types: Api,Worker
 £solution-name: customer-service.slnx
+£github-org-name: sming-code
+£github-source-name: sming-utilities
+£utility-package-root: SmingCode.Utilities

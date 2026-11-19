@@ -15,7 +15,6 @@ param service_type string
 param reservation_svc_target_branch string = ''
 param ppl_svc_target_branch string = ''
 param broken_svc_target_branch string = ''
-param send_customer_create_target_branch string = ''
 param consume_customer_create_target_branch string = ''
 
 var revisionNo = replace(container_app_image_tag, '.', '')
@@ -137,10 +136,6 @@ resource container_app 'Microsoft.App/containerapps@2026-01-01' = {
             {
               name: 'broken_svc_target_branch'
               value: broken_svc_target_branch
-            }
-            {
-              name: 'send_customer_create_target_branch'
-              value: send_customer_create_target_branch
             }
             {
               name: 'consume_customer_create_target_branch'

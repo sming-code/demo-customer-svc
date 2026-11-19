@@ -1,4 +1,4 @@
-name: Customer service pipeline.
+name: Customer Service pipeline.
 
 on:
   pull_request:
@@ -41,14 +41,6 @@ on:
         required: true
       broken-svc-target-branch:
         description: Branch to target for Broken Service api client
-        type: choice
-        options:
-          - default
-          - branch
-        default: default
-        required: true
-      send-customer-create-target-branch:
-        description: Branch to target when sending to customer-create topic
         type: choice
         options:
           - default
@@ -133,12 +125,12 @@ jobs:
       resource-group-name: ${{ case(needs.get-branch-suffix.outputs.branch-suffix == '', 'rg-customer-dev', format('rg-dev{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
       sql-database-name:  sql-customer-dev${{ needs.get-branch-suffix.outputs.branch-suffix }}
       sql-server-name: dev-tag
+      sql-elastic-pool-name: sql-elastic-dev
       subscription: sub-tag-testing
       version-no: ${{ needs.variables.outputs.version-no }}
       reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
-      send-customer-create-target-branch: ${{ case(inputs.send-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       consume-customer-create-target-branch: ${{ case(inputs.consume-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
@@ -156,19 +148,19 @@ jobs:
       app-name: customer
       app-insights-name: insight-customer-test${{ needs.get-branch-suffix.outputs.branch-suffix }}
       branch-suffix: ${{ needs.get-branch-suffix.outputs.branch-suffix }}
-      container-app-environment-name: caenv-test-tag-private
+      container-app-environment-name: cae-private-test
       environment-name: test
-      environment-resource-group-name: rg-test-tag
-      log-analytics-workspace-name: log-analytics-test-tag
+      environment-resource-group-name: rg-core-test
+      log-analytics-workspace-name: log-analytics-test
       resource-group-name: ${{ case(needs.get-branch-suffix.outputs.branch-suffix == '', 'rg-customer-test', format('rg-test{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
       sql-database-name:  sql-customer-test${{ needs.get-branch-suffix.outputs.branch-suffix }}
-      sql-server-name: test-tag
-      subscription: sub-tag-testing
+      sql-server-name: sql-private-test
+      sql-elastic-pool-name: sql-elastic-test
+      subscription: sub-TAG-TAGdigital-test-001
       version-no: ${{ needs.variables.outputs.version-no }}
       reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
-      send-customer-create-target-branch: ${{ case(inputs.send-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       consume-customer-create-target-branch: ${{ case(inputs.consume-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
@@ -186,19 +178,19 @@ jobs:
       app-name: customer
       app-insights-name: insight-customer-prod${{ needs.get-branch-suffix.outputs.branch-suffix }}
       branch-suffix: ${{ needs.get-branch-suffix.outputs.branch-suffix }}
-      container-app-environment-name: caenv-prod-tag-private
+      container-app-environment-name: cae-private-prod
       environment-name: prod
-      environment-resource-group-name: rg-prod-tag
-      log-analytics-workspace-name: log-analytics-prod-tag
+      environment-resource-group-name: rg-core-prod
+      log-analytics-workspace-name: log-analytics-prod
       resource-group-name: ${{ case(needs.get-branch-suffix.outputs.branch-suffix == '', 'rg-customer-prod', format('rg-prod{0}', needs.get-branch-suffix.outputs.branch-suffix)) }}
       sql-database-name:  sql-customer-prod${{ needs.get-branch-suffix.outputs.branch-suffix }}
-      sql-server-name: prod-tag
-      subscription: sub-tag-testing
+      sql-server-name: sql-private-prod
+      sql-elastic-pool-name: sql-elastic-prod
+      subscription: sub-TAG-TAGdigital-prod-001
       version-no: ${{ needs.variables.outputs.version-no }}
       reservation-svc-target-branch: ${{ case(inputs.reservation-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       ppl-svc-target-branch: ${{ case(inputs.ppl-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       broken-svc-target-branch: ${{ case(inputs.broken-svc-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
-      send-customer-create-target-branch: ${{ case(inputs.send-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
       consume-customer-create-target-branch: ${{ case(inputs.consume-customer-create-target-branch == 'default', '', needs.get-branch-suffix.outputs.branch-suffix) }}
     secrets:
       ghcr-username: ${{ secrets.GHCR_USERNAME }}
