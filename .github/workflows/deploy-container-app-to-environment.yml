@@ -33,6 +33,9 @@ on:
       sql-server-name:
         required: true
         type: string
+      sql-elastic-pool-name:
+        required: true
+        type: string
       subscription:
         required: true
         type: string
@@ -78,6 +81,7 @@ env:
   resource-group-name: ${{ inputs.resource-group-name }}
   sql-database-name: ${{ inputs.sql-database-name }}
   sql-server-name: ${{ inputs.sql-server-name }}
+  sql-elastic-pool-name: ${{ inputs.sql-elastic-pool-name }}
   subscription: ${{ inputs.subscription }}
   version-no: ${{ inputs.version-no }}
   reservation-svc-target-branch: ${{ inputs.reservation-svc-target-branch }}
